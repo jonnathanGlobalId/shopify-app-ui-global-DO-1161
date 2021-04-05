@@ -1,9 +1,10 @@
 import { Heading, Page } from "@shopify/polaris";
+import MainLayout from '../Layout/MainLayout';
 
 const Index = () => (
-  <Page>
-    <Heading>Shopify app with Node and React 🎉!!!</Heading>
-  </Page>
+  <MainLayout>
+    <Heading>Listo para iniciar la aplicación</Heading>
+  </MainLayout>
 );
 
 export default Index;
