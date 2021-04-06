@@ -24,7 +24,7 @@ const HeaderTabs = () => {
         </li>
         <li className={`h-full flex w-1/3 ${Approvals ? 'text-blue-600' : 'text-black'}`}>
           <Link href="/approvals">
-            <p  className="h-full justify-center cursor-pointer items-center w-full flex font-medium text-2xl">
+            <p  className="h-full text-center justify-center cursor-pointer items-center w-full flex font-medium text-2xl">
               Pendding approvals
             </p>
           </Link>

@@ -1,11 +1,16 @@
 import React from 'react';
-import MainLayout from '../Layout/MainLayout';
+import {HeaderTitle, UserApproval} from '../components';
+import ApprovalLayout from '../Layout/ApprovalLayout';
+import {DummyData} from '../utils/dummyData';
 
 const approvals = () => {
   return (
-    <MainLayout>
-      <h1>Los inicios de aprovación</h1>
-    </MainLayout>
+    <ApprovalLayout>
+      <HeaderTitle title="Pending Approvals" subtitle="Approve or deny purchases" />
+      {DummyData.map((dummy: DummyData) => (
+        <UserApproval dummy={dummy} />
+      ))}
+    </ApprovalLayout>
   )
 }
 

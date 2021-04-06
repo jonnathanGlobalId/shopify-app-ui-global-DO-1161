@@ -12,7 +12,9 @@ const ConditionsGlobalId = () => {
       </div>
       <div className="flex justify-between my-10 items-center">
         <h4 className="text-2xl"
-          >Require ID verification for orders above $ <span>100</span>
+          >Require ID verification for orders above $ 
+            <span className="border-2 border-blue-500 text-blue-500 px-5 py-2 rounded-lg ml-3 font-semibold"
+              >100</span>
         </h4>
         <input
           id="ammount"
