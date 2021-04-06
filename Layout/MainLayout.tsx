@@ -1,12 +1,14 @@
 import React from 'react';
-import {Header} from '../components';
+import {HeaderTabs} from '../components';
 
 const MainLayout: React.FC = ({children}) => {
   return (
-    <div>
-      <Header />
-      {children}
-    </div>
+    <>
+      <HeaderTabs />
+      <div className="max-w-screen-lg m-auto bg-white pt-10 pl-20 rounded-lg mt-16">
+        {children}
+      </div>
+    </>
   )
 }
 

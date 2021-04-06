@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 
-const Header = () => {
+const HeaderTabs = () => {
 
   const {pathname} = useRouter();
 
@@ -18,7 +18,7 @@ const Header = () => {
         <li className={`h-full flex w-1/3 ${Home ? 'text-blue-600' : 'text-black'}`}>
           <Link href="/">
             <p className="h-full justify-center cursor-pointer items-center w-full flex font-medium text-2xl">
-              Inicio
+              Settings
             </p>
           </Link>
         </li>
@@ -41,4 +41,4 @@ const Header = () => {
   )
 }
 
-export default Header
+export default HeaderTabs
