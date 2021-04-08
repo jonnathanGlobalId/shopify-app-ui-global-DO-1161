@@ -8,3 +8,10 @@ interface DummyData {
   purchaseDate?: string;
   expirationDate?:string;
 }
+
+interface DummyTable {
+  name: string;
+  purchase: string;
+  verification: string;
+  status: string;
+}

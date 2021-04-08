@@ -11,7 +11,7 @@ const UserApproval: React.FC<PropsUserData> = (props) => {
 
   return (
     <>
-      <div className="px-14">
+      <div className="px-20">
         <div className="flex items-center justify-between mb-10">
           <div>
             <h1 className="text-4xl text-gray-500 font-bold">{name}</h1>
@@ -29,7 +29,7 @@ const UserApproval: React.FC<PropsUserData> = (props) => {
             </div>
             <div>
               <h3 className="text-4xl text-gray-500 font-bold mb-8">Purchase ID</h3>
-              <h5 className="underline text-3xl text-blue-500">{purchaseId}</h5>
+              <h5 className="underline text-3xl text-blue-500 cursor-pointer">{purchaseId}</h5>
             </div>
           </div>
         {/* Contenido oculto */}
