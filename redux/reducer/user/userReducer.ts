@@ -8,10 +8,12 @@ import {
   SAVE_GLOBAL_STATE_SUCCESS,
   SAVE_GLOBAL_STATE_FAILURE,
   CHANGE_AMMOUNT,
+  GETURL_SHOP
 } from '../../types';
 
 interface ITinitialState {
   user: null | ITDummyDataApi;
+  shopUrl: string;
   error: boolean;
   loading: boolean;
   isChanged: boolean;
@@ -19,6 +21,7 @@ interface ITinitialState {
 
 const initialState: ITinitialState = {
   user: null,
+  shopUrl: "",
   error: false,
   loading: false,
   isChanged: false,
@@ -71,6 +74,12 @@ const userReducer = (state: ITinitialState = initialState, action: userDispatch)
       error: true,
       loading: false,
     };
+
+  case GETURL_SHOP:
+    return {
+      ...state,
+      shopUrl: action.payload
+    }
 
   default:
     return state

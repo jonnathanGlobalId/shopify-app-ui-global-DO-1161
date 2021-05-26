@@ -1,14 +1,23 @@
 import {useState} from 'react';
 import HideContent from './HideContent';
+import {useSelector} from 'react-redux';
+import {appState} from '../../redux/reducer';
+import {QUERY_ORDERS} from '../../graphql/Querys';
+import {useQuery} from '@apollo/react-hooks';
 
 interface PropsUserData {
   dummy?: DummyData
 };
 
 const UserApproval: React.FC<PropsUserData> = (props) => {
-  const {name, verified, birthday, purchaseId, issueDate, expirationDate, purchaseDate, status} = props.dummy;
+  const {shopUrl} = useSelector((state: appState) => state.user)
+  const {data, error, loading} = useQuery(QUERY_ORDERS);
+  console.log(data);
+  const {name, verified, birthday, purchaseId, issueDate, expirationDate, purchaseDate, status, id} = props.dummy;
   const [showContent, setShowContent] = useState(false);
-  console.log(status);
+  const idData = id.split('/');
+  const idNumber = idData[4];
+  console.log(idNumber);
   return (
     <>
       <div className="px-20">
@@ -31,7 +40,7 @@ const UserApproval: React.FC<PropsUserData> = (props) => {
             </div>
             <div>
               <h3 className="text-4xl text-gray-500 font-bold mb-8">Purchase ID</h3>
-              <h5 className="underline text-3xl text-blue-500 cursor-pointer">{purchaseId}</h5>
+              <a target="blank" href={`${shopUrl}/admin/orders/${idNumber}`} className="underline text-3xl text-blue-500 cursor-pointer">{idNumber}</a>
             </div>
           </div>
         {/* Contenido oculto */}

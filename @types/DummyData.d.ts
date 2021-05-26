@@ -1,5 +1,5 @@
 interface DummyData {
-  id: number;
+  id: string;
   name: string;
   verified: string;
   birthday: string;

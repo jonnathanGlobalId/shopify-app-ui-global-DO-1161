@@ -7,9 +7,9 @@ import {appState} from '../redux/reducer';
 import {CREATE_SCRIPT_TAG} from '../graphql/Mutations';
 import {QUERY_SCRIPTTAGS, QUERY_SHOPID} from '../graphql/Querys';
 import {useQuery, useMutation} from '@apollo/react-hooks';
-import axios from 'axios';
 import {createHmac} from 'crypto';
 import moment from 'moment';
+import {GETURL_SHOP} from '../redux/types';
 
 const Index = () => {  
   const [ownerId, setOwnerId] = useState<string>('');
@@ -33,6 +33,10 @@ const Index = () => {
       const id: string = userIdArray[4];
       setOwnerId(id);
       setShopName(userId?.name);
+      dispatch({
+        type: GETURL_SHOP,
+        payload: userId?.url
+      })
     }
   }, [resShopId?.data]);
 

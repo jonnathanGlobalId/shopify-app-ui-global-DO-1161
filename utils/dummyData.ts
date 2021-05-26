@@ -1,6 +1,6 @@
 export const DummyData: DummyData[] = [
   {
-    id: 0,
+    id: "gid://shopify/Order/3787963170968",
     name: 'Martin Jekyll',
     verified: 'Verified with Onfido',
     birthday: '06/12/1983',
@@ -11,7 +11,7 @@ export const DummyData: DummyData[] = [
     status: 'APPROVED'
   },
   {
-    id: 1,
+    id: "gid://shopify/Order/3811284549784",
     name: 'Thomas Hyde',
     verified: 'Verified with Onfido',
     birthday: '02/01/2001',
@@ -22,7 +22,7 @@ export const DummyData: DummyData[] = [
     status: 'PENDING'
   },
   {
-    id: 2,
+    id: "gid://shopify/Order/3850289676440",
     name: 'William Taraval',
     verified: 'Verified with Onfido',
     birthday: '11/15/1996',

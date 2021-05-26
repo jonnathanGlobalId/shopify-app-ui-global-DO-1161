@@ -19,8 +19,28 @@ const QUERY_SHOPID = gql`
     shop {
       id
       name
+      url
     }
   }
 `;
 
-export {QUERY_SCRIPTTAGS, QUERY_SHOPID};
+const QUERY_ORDERS = gql`
+  query {
+  orders(first: 5) {
+    edges {
+      node {
+        id
+        confirmed
+        createdAt
+        subtotalPriceSet {
+          shopMoney {
+            amount 
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}`;
+
+export {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_ORDERS};

@@ -21,3 +21,6 @@ export const CHANGE_AMMOUNT = 'CHANGE_AMMOUNT';
 
 //Type para cambiar usuario de globalID
 export const CHANGE_CLIENT_GLOBALID = 'CHANGE_CLIENT_GLOBALID';
+
+//Type para ver la url del usuario
+export const GETURL_SHOP = 'GETURL_SHOP';
