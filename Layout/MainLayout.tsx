@@ -8,7 +8,7 @@ const MainLayout: React.FC = ({children}) => {
       <div className="max-w-screen-lg m-auto bg-white rounded-2xl mt-16">
         {children}
       </div>
-        <div className="h-10" />
+      <div className="h-10" />
     </>
   )
 }

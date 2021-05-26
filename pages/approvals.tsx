@@ -8,7 +8,7 @@ const approvals = () => {
     <ApprovalLayout>
       <HeaderTitle title="Pending Approvals" subtitle="Approve or deny purchases" />
       {DummyData.map((dummy: DummyData) => (
-        <UserApproval dummy={dummy} />
+        <UserApproval key={dummy.id} dummy={dummy} />
       ))}
     </ApprovalLayout>
   )

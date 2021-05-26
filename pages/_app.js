@@ -1,13 +1,16 @@
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import App from "next/app";
+import Head from 'next/head';
 import { AppProvider } from "@shopify/polaris";
 import { Provider, useAppBridge } from "@shopify/app-bridge-react";
 import { authenticatedFetch } from "@shopify/app-bridge-utils";
 import { Redirect } from "@shopify/app-bridge/actions";
 import "@shopify/polaris/dist/styles.css";
 import translations from "@shopify/polaris/locales/en.json";
-import "../styles/index.css";
+import '../styles/tailwind.css';
+import {Provider as ReduxProvider} from 'react-redux';
+import store from '../redux/store';
 
 function userLoggedInFetch(app) {
   const fetchFunction = authenticatedFetch(app);
@@ -54,17 +57,26 @@ class MyApp extends App {
   render() {
     const { Component, pageProps, shopOrigin } = this.props;
     return (
-      <AppProvider i18n={translations}>
-        <Provider
-          config={{
-            apiKey: API_KEY,
-            shopOrigin: shopOrigin,
-            forceRedirect: true,
-          }}
-        >
-          <MyProvider Component={Component} {...pageProps} />
-        </Provider>
-      </AppProvider>
+      <>
+        <Head>
+          <title>GlobalID App</title>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossOrigin="anonymous" />
+          <meta charSet="utf-8" />
+        </Head>
+        <AppProvider i18n={translations}>
+          <ReduxProvider store={store}>
+            <Provider
+              config={{
+                apiKey: API_KEY,
+                shopOrigin: shopOrigin,
+                forceRedirect: true,
+              }}
+            > 
+              <MyProvider Component={Component} {...pageProps} {...this.props} />
+            </Provider>
+          </ReduxProvider>
+        </AppProvider>
+      </>
     );
   }
 }

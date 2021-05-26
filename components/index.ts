@@ -15,3 +15,7 @@ export {ConnectGlobalId, ConditionsGlobalId, ShopInfo};
 import UserApproval from './Approvals/UserApproval';
 import HideContent from './Approvals/HideContent';
 export {UserApproval, HideContent}
+
+//Componentes del UI
+import SaveChanges from './ui/SaveChanges';
+export {SaveChanges};

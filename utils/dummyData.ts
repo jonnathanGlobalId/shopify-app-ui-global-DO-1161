@@ -8,6 +8,7 @@ export const DummyData: DummyData[] = [
     issueDate: '01/01/2016',
     purchaseDate: '02/10/2021',
     expirationDate: '01/01/2026',
+    status: 'APPROVED'
   },
   {
     id: 1,
@@ -18,6 +19,7 @@ export const DummyData: DummyData[] = [
     issueDate: '01/01/2016',
     purchaseDate: '02/10/2021',
     expirationDate: '01/01/2026',
+    status: 'PENDING'
   },
   {
     id: 2,
@@ -28,5 +30,30 @@ export const DummyData: DummyData[] = [
     issueDate: '01/01/2016',
     purchaseDate: '02/10/2021',
     expirationDate: '01/01/2026',
+    status: 'REJECTED'
   },
 ];
+
+export const DummyTable: DummyTable[] = [
+  {
+    id: 'tx-1',
+    name: 'Martin Jekyll',
+    purchase: '02/08/2021',
+    status: 'Age',
+    verification: 'Approved',
+  },
+  {
+    id: 'tx-2',
+    name: 'Ty Segal',
+    purchase: '02/10/21',
+    status: 'Age',
+    verification: 'Approved',
+  },
+  {
+    id: 'tx-3',
+    name: 'Maria Smith',
+    purchase: '02/10/21',
+    status: 'Age',
+    verification: 'Denied',
+  },
+]

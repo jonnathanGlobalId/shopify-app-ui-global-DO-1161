@@ -6,9 +6,9 @@ interface PropsUserData {
 };
 
 const UserApproval: React.FC<PropsUserData> = (props) => {
-  const {name, verified, birthday, purchaseId, issueDate, expirationDate, purchaseDate} = props.dummy;
+  const {name, verified, birthday, purchaseId, issueDate, expirationDate, purchaseDate, status} = props.dummy;
   const [showContent, setShowContent] = useState(false);
-
+  console.log(status);
   return (
     <>
       <div className="px-20">
@@ -17,8 +17,10 @@ const UserApproval: React.FC<PropsUserData> = (props) => {
             <h1 className="text-4xl text-gray-500 font-bold">{name}</h1>
             <h4>{verified}</h4>
           </div>
-          <div className="cursor-pointer">
-            <h1 onClick={() => setShowContent(!showContent)}>{showContent ? 'Hide' : 'Show'}</h1>
+          <div 
+              onClick={() => setShowContent(!showContent)} 
+              className="cursor-pointer h-10 w-10 justify-center items-center">
+            <i className={`fas fa-chevron-${showContent ? 'up' : 'down'} text-2xl`} />
           </div>
         </div>
         <div className={`transition-all transform origin-bottom ${showContent ? '' : ''}`}>
@@ -42,8 +44,22 @@ const UserApproval: React.FC<PropsUserData> = (props) => {
         </div>
         {/* Contenido oculto */}
           <div className="flex mb-10">
-            <button className="px-16 py-4 rounded-full text-3xl mr-10 focus:outline-none font-medium bg-gray-300">Reject</button>
-            <button className="px-16 py-4 rounded-full text-3xl mr-10 focus:outline-none font-medium bg-blue-600 text-white">Approve</button>
+            <button
+              onClick={() => console.log('Rechazando la orden')}
+              disabled={status === 'REJECTED' ? true : false}
+              className={`px-16 py-4 rounded-full text-2xl mr-10 focus:outline-none font-medium ${status === 'REJECTED' ? 'w-1/2 bg-gray-100 cursor-not-allowed text-gray-400' : status === 'APPROVED' ? 'hidden' : status === 'PENDING' && 'bg-gray-300'}`}
+            >
+              {status === 'REJECTED' && <i className="fas fa-check text-gray-400 mr-4" />}
+              {status === 'REJECTED' ? 'Purchase rejected' : 'Reject' }
+            </button>
+            <button
+              onClick={() => console.log('Aprobando la orden')}
+              disabled={status === 'APPROVED' ? true : false}
+              className={`px-16 py-4 rounded-full text-2xl mr-10 focus:outline-none font-medium text-white ${status === 'APPROVED' ? 'w-1/2 bg-blue-300 cursor-not-allowed' : status === 'REJECTED' ? 'hidden' : status === 'PENDING' && 'bg-blue-600'}`}
+            >
+              {status === 'APPROVED' && <i className="fas fa-check text-white mr-4" />}
+              {status === 'APPROVED' ? 'Purchase approved' : 'Approve' }
+            </button>
           </div>
         </div>
       </div>

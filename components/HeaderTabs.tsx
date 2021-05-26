@@ -13,7 +13,7 @@ const HeaderTabs = () => {
 
   return (
     <div className="h-24">
-      <ul className="flex h-full items-center relative w-1/3 justify-between transition-all">
+      <ul className="flex h-full items-center relative lg:w-1/3 md:w-full justify-between transition-all">
         <div className={`bg-blue-600 absolute bottom-0 left-0 h-1 w-1/3 transition-all ${Home ? 'left-0' : Approvals ? 'left-1/3' : History ? 'left-2/3' : 'left-0'}`} />
         <li className={`h-full flex w-1/3 ${Home ? 'text-blue-600' : 'text-black'}`}>
           <Link href="/">
