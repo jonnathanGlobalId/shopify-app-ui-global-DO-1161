@@ -10,6 +10,7 @@ import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS} from '../graphql/Que
 import {useQuery, useMutation} from '@apollo/react-hooks';
 import {createHmac} from 'crypto';
 import moment from 'moment';
+import axios from 'axios';
 import {GETURL_SHOP} from '../redux/types';
 import {ITGetOrders} from '../redux//@types/settingsActionTypes';
 import { DummyData } from '../utils/dummyData';
@@ -25,8 +26,8 @@ const Index = () => {
   const resScriptag = useQuery(QUERY_SCRIPTTAGS);
   const resShopId = useQuery(QUERY_SHOPID); 
   const resDraftOrders = useQuery(QUERY_DRAFT_ORDERS);
-  console.log('Respuesta de las drafOrders', resDraftOrders?.data?.draftOrders?.edges);
-  console.log('Errores de las drafOrders', resDraftOrders?.error);
+  // console.log('Respuesta de las drafOrders', resDraftOrders?.data?.draftOrders?.edges);
+  // console.log('Errores de las drafOrders', resDraftOrders?.error);
 
   useEffect(() => {
     console.log('Vamos a obtener los datos del usuario desde el api');
@@ -38,6 +39,7 @@ const Index = () => {
       const userId = resShopId.data?.shop;
       const userIdArray: string = userId?.id.split('/');
       const id: string = userIdArray[4];
+      console.log(id);
       setOwnerId(id);
       setShopName(userId?.name);
       dispatch({

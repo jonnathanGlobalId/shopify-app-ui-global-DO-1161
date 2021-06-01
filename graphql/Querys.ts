@@ -20,6 +20,7 @@ const QUERY_SHOPID = gql`
       id
       name
       url
+      myshopifyDomain
     }
   }
 `;
@@ -45,7 +46,7 @@ const QUERY_ORDERS = gql`
 
 const QUERY_DRAFT_ORDERS = gql`
   query {
-    draftOrders(first: 250) {
+    draftOrders(first: 5) {
       edges {
         node {
           id
