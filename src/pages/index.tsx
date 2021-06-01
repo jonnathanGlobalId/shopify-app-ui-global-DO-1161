@@ -10,6 +10,7 @@ import {useQuery, useMutation} from '@apollo/react-hooks';
 import {createHmac} from 'crypto';
 import moment from 'moment';
 import {GET_URL_SHOP} from '../redux/types';
+import {NEXT_PUBLIC_SECRET, GLOBAL_ID_API_URL} from '../conf'
 
 const Index = () => {
   const [ownerId, setOwnerId] = useState<string>('');
@@ -44,7 +45,7 @@ const Index = () => {
       createScripts({
         variables: {
           input: {
-            src: `https://shopify-fake-api.herokuapp.com/script?shop=${shopNAme}&id=${ownerId}`,
+            src: `${GLOBAL_ID_API_URL}/script-tag`,
             displayScope: "ALL",
           },
         },
@@ -55,7 +56,7 @@ const Index = () => {
 
   useEffect(() => {
     if(resScriptag?.data !== undefined && resScriptag?.data.scriptTags.edges.length > 0 && resShopId?.data !== undefined) {
-      const secret = process.env.NEXT_PUBLIC_SECRET;
+      const secret = NEXT_PUBLIC_SECRET;
       const epoch = (moment().unix()).toString();
       const hmac = createHmac('sha256', `${ownerId}-${secret}`).update(epoch);
     }

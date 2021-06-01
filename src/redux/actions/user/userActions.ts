@@ -6,6 +6,8 @@ import {
 import axios from 'axios';
 import {Dispatch} from 'redux';
 import {GetInfoDispatchTypes} from '../../@types/settingsActionTypes';
+import { GLOBAL_ID_API_URL } from '../../../conf';
+import { getAccessToken } from '../../../utils/auth';
 
 export const getUSerInfoAction = () => {
   return async (dispatch: Dispatch<GetInfoDispatchTypes>) => {
@@ -13,7 +15,14 @@ export const getUSerInfoAction = () => {
       dispatch({
         type: GET_USER_INFO
       });
-      const result = await axios.get('https://shopify-fake-api.herokuapp.com/api/user-settings');
+
+      const access_token = await getAccessToken();
+
+      const result = await axios.get(`${GLOBAL_ID_API_URL}/owner/${owner_id}`, {
+        headers: {
+          'Authorization': `Bearer ${access_token}`
+        }
+      });
       dispatch({
         type: GET_USER_INFO_SUCCESS,
         payload: result.data.data

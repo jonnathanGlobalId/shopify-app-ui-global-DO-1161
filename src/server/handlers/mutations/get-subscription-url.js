@@ -1,5 +1,6 @@
 import "isomorphic-fetch";
 import { gql } from "apollo-boost";
+import { HOST } from "../../../conf";
 
 export function RECURRING_CREATE(url) {
   return gql`
@@ -42,7 +43,7 @@ export const getSubscriptionUrl = async (ctx) => {
   const { client } = ctx;
   const confirmationUrl = await client
     .mutate({
-      mutation: RECURRING_CREATE(process.env.HOST),
+      mutation: RECURRING_CREATE(HOST),
     })
     .then((response) => response.data.appSubscriptionCreate.confirmationUrl);
 

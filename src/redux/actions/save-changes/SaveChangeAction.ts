@@ -7,6 +7,8 @@ import axios from 'axios';
 import {Dispatch} from 'redux';
 import {appState} from '../../reducer';
 import {UserDispatchTypes} from '../../@types/settingsActionTypes';
+import {GLOBAL_ID_API_URL} from '../../../conf'
+import { getAccessToken } from '../../../utils/auth';
 
 export const saveChangeActions = () => {
   return async (dispatch: Dispatch<UserDispatchTypes>, getState: () => appState) => {
@@ -15,7 +17,14 @@ export const saveChangeActions = () => {
     });
     try {
       const user_settings = getState().user.user;
-      await axios.post('https://shopify-fake-api.herokuapp.com/api/user-settings', user_settings);
+
+      const access_token: string = await getAccessToken();
+      await axios.put(`${GLOBAL_ID_API_URL}/owner/${owner_id}`, user_settings, {
+        headers: {
+          'Authorization': `Bearer ${access_token}`
+        }
+      });
+
       dispatch({
         type: SAVE_GLOBAL_STATE_SUCCESS,
         payload: user_settings

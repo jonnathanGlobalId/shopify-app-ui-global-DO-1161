@@ -8,6 +8,7 @@ import {
   ResourceList,
   Stack,
 } from "@shopify/polaris";
+import { GLOBAL_ID_API_URL } from "../conf";
 
 const CREATE_SCRIPT_TAG = gql`
   mutation scriptTagCreate($input: ScriptTagInput!) {
@@ -75,7 +76,7 @@ function ScriptPage() {
                 createScripts({
                   variables: {
                     input: {
-                      src: "https://shopify-fake-api.herokuapp.com/script",
+                      src: `${GLOBAL_ID_API_URL}/script-tag`,
                       displayScope: "ALL",
                     },
                   },
