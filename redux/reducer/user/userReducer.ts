@@ -8,7 +8,11 @@ import {
   SAVE_GLOBAL_STATE_SUCCESS,
   SAVE_GLOBAL_STATE_FAILURE,
   CHANGE_AMMOUNT,
-  GETURL_SHOP
+  GETURL_SHOP,
+  CHANGE_ORDER_STATUS,
+  CHANGE_ORDER_STATUS_SUCCESS,
+  CHANGE_ORDER_STATUS_REJECT,
+  GET_ORDERS
 } from '../../types';
 
 interface ITinitialState {
@@ -17,6 +21,7 @@ interface ITinitialState {
   error: boolean;
   loading: boolean;
   isChanged: boolean;
+  orders: null | DummyData[];
 }
 
 const initialState: ITinitialState = {
@@ -25,11 +30,13 @@ const initialState: ITinitialState = {
   error: false,
   loading: false,
   isChanged: false,
+  orders: null,
 };
 
 const userReducer = (state: ITinitialState = initialState, action: userDispatch) => {
   switch (action.type) {
 
+  case CHANGE_ORDER_STATUS:
   case SAVE_GLOBAL_STATE:
   case GET_USER_INFO:
     return {
@@ -79,6 +86,24 @@ const userReducer = (state: ITinitialState = initialState, action: userDispatch)
     return {
       ...state,
       shopUrl: action.payload
+    }
+
+  case CHANGE_ORDER_STATUS_SUCCESS:
+    return {
+      ...state,
+      orders: [...state.orders, {...action.payload}]
+    }
+
+  case CHANGE_ORDER_STATUS_REJECT:
+    return {
+      ...state,
+      orders: [...state.orders, {...action.payload}]
+    }
+
+  case GET_ORDERS: 
+    return {
+      ...state,
+      orders: action.payload
     }
 
   default:

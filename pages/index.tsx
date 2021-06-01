@@ -1,25 +1,32 @@
 import {useEffect, useState} from 'react';
 import MainLayout from '../Layout/MainLayout';
+import {Dispatch} from 'redux';
 import {ConditionsGlobalId, HeaderTitle, SaveChanges} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUSerInfoAction} from '../redux/actions/user/userActions';
 import {appState} from '../redux/reducer';
 import {CREATE_SCRIPT_TAG} from '../graphql/Mutations';
-import {QUERY_SCRIPTTAGS, QUERY_SHOPID} from '../graphql/Querys';
+import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS} from '../graphql/Querys';
 import {useQuery, useMutation} from '@apollo/react-hooks';
 import {createHmac} from 'crypto';
 import moment from 'moment';
 import {GETURL_SHOP} from '../redux/types';
+import {ITGetOrders} from '../redux//@types/settingsActionTypes';
+import { DummyData } from '../utils/dummyData';
 
 const Index = () => {  
   const [ownerId, setOwnerId] = useState<string>('');
   const [shopNAme, setShopName] = useState<string>('');
 
-  const dispatch = useDispatch();    
+  const dispatch = useDispatch();
+  const ordersDispatch: Dispatch<ITGetOrders> = useDispatch();
   const userState = useSelector((state: appState) => state.user);
   const [createScripts] = useMutation(CREATE_SCRIPT_TAG);
   const resScriptag = useQuery(QUERY_SCRIPTTAGS);
   const resShopId = useQuery(QUERY_SHOPID); 
+  const resDraftOrders = useQuery(QUERY_DRAFT_ORDERS);
+  console.log('Respuesta de las drafOrders', resDraftOrders?.data?.draftOrders?.edges);
+  console.log('Errores de las drafOrders', resDraftOrders?.error);
 
   useEffect(() => {
     console.log('Vamos a obtener los datos del usuario desde el api');
@@ -36,6 +43,10 @@ const Index = () => {
       dispatch({
         type: GETURL_SHOP,
         payload: userId?.url
+      })
+      ordersDispatch({
+        type: 'GET_ORDERS',
+        payload: DummyData,
       })
     }
   }, [resShopId?.data]);

@@ -7,6 +7,14 @@ const GET_USER_INFO_FAILURE = 'GET_USER_INFO_FAILURE';
 const CHANGE_CONDITIONS = 'CHANGE_CONDITIONS';
 const CHANGE_AMMOUNT = 'CHANGE_AMMOUNT';
 
+
+const CHANGE_ORDER_STATUS = 'CHANGE_ORDER_STATUS';
+const CHANGE_ORDER_STATUS_SUCCESS = 'CHANGE_ORDER_STATUS_SUCCESS';
+const CHANGE_ORDER_STATUS_REJECT = 'CHANGE_ORDER_STATUS_REJECT';
+
+
+const GET_ORDERS = 'GET_ORDERS'
+
 export interface ITSaveChanges {
   readonly type: typeof SAVE_GLOBAL_STATE,
 };
@@ -38,6 +46,24 @@ export interface ITchangeConditionals {
   payload: ITDummySettings,
 }
 
+export interface ITChangestatusOrder {
+  readonly type: typeof CHANGE_ORDER_STATUS,
+}
+
+export interface ITChangestatusOrderSuccess {
+  readonly type: typeof CHANGE_ORDER_STATUS_SUCCESS,
+  payload: DummyData
+}
+
+export interface ITChangestatusOrderReject {
+  readonly type: typeof CHANGE_ORDER_STATUS_REJECT,
+  payload: DummyData
+}
+
+export interface ITGetOrders {
+  readonly type: typeof GET_ORDERS,
+  payload: DummyData[]
+}
 
 type userDispatch = 
   ITSaveChanges | 
@@ -47,7 +73,12 @@ type userDispatch =
   ITGetUserInfo | 
   ITGetUserInfoSuccess | 
   ITGetUserInfoFailure |
-  ITChangeAmmount;
+  ITChangeAmmount |
+  ITChangestatusOrder |
+  ITChangestatusOrderSuccess |
+  ITChangestatusOrderReject |
+  ITGetOrders;
 
 export type GetInfoDispatchTypes = ITGetUserInfo | ITGetUserInfoFailure | ITGetUserInfoSuccess;
 export type UserDispatchTypes = ITSaveChanges | ITSaveChangesFailure | ITSaveChangesSuccess;
+export type changeStatusOrder = ITChangestatusOrder | ITChangestatusOrderSuccess |ITChangestatusOrderReject;

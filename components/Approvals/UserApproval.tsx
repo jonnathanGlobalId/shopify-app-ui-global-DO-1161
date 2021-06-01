@@ -1,23 +1,43 @@
 import {useState} from 'react';
+import {Dispatch} from 'redux';
 import HideContent from './HideContent';
-import {useSelector} from 'react-redux';
 import {appState} from '../../redux/reducer';
 import {QUERY_ORDERS} from '../../graphql/Querys';
 import {useQuery} from '@apollo/react-hooks';
+import {useDispatch, useSelector} from 'react-redux';
+import {changeStatusOrder} from '../../redux/@types/settingsActionTypes';
 
 interface PropsUserData {
   dummy?: DummyData
 };
 
 const UserApproval: React.FC<PropsUserData> = (props) => {
-  const {shopUrl} = useSelector((state: appState) => state.user)
+  const dispatch: Dispatch<changeStatusOrder> = useDispatch();
+  const {shopUrl, orders} = useSelector((state: appState) => state.user)
   const {data, error, loading} = useQuery(QUERY_ORDERS);
   console.log(data);
-  const {name, verified, birthday, purchaseId, issueDate, expirationDate, purchaseDate, status, id} = props.dummy;
+  const {name, verified, birthday, issueDate, expirationDate, purchaseDate, status, id} = props.dummy;
   const [showContent, setShowContent] = useState(false);
   const idData = id.split('/');
-  const idNumber = idData[4];
-  console.log(idNumber);
+  const idNumber = Number(idData[4]);
+  console.log(typeof idNumber, idNumber);
+
+  const acceptDraftOrder = () => {
+    console.log({...props.dummy, status: 'APPROVED'});
+    dispatch({
+      type: 'CHANGE_ORDER_STATUS_SUCCESS',
+      payload: {...props.dummy, status: 'APPROVED'}
+    })
+  }
+
+  const rejectDraftOrder = () => {
+    console.log({...props.dummy, status: 'REJECTED'});
+    dispatch({
+      type: 'CHANGE_ORDER_STATUS_SUCCESS',
+      payload: {...props.dummy, status: 'REJECTED'}
+    })
+  }
+
   return (
     <>
       <div className="px-20">
@@ -54,7 +74,7 @@ const UserApproval: React.FC<PropsUserData> = (props) => {
         {/* Contenido oculto */}
           <div className="flex mb-10">
             <button
-              onClick={() => console.log('Rechazando la orden')}
+              onClick={() => rejectDraftOrder()}
               disabled={status === 'REJECTED' ? true : false}
               className={`px-16 py-4 rounded-full text-2xl mr-10 focus:outline-none font-medium ${status === 'REJECTED' ? 'w-1/2 bg-gray-100 cursor-not-allowed text-gray-400' : status === 'APPROVED' ? 'hidden' : status === 'PENDING' && 'bg-gray-300'}`}
             >
@@ -62,7 +82,7 @@ const UserApproval: React.FC<PropsUserData> = (props) => {
               {status === 'REJECTED' ? 'Purchase rejected' : 'Reject' }
             </button>
             <button
-              onClick={() => console.log('Aprobando la orden')}
+              onClick={() => acceptDraftOrder()}
               disabled={status === 'APPROVED' ? true : false}
               className={`px-16 py-4 rounded-full text-2xl mr-10 focus:outline-none font-medium text-white ${status === 'APPROVED' ? 'w-1/2 bg-blue-300 cursor-not-allowed' : status === 'REJECTED' ? 'hidden' : status === 'PENDING' && 'bg-blue-600'}`}
             >

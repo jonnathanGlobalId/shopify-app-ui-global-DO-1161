@@ -8,7 +8,7 @@ export const DummyData: DummyData[] = [
     issueDate: '01/01/2016',
     purchaseDate: '02/10/2021',
     expirationDate: '01/01/2026',
-    status: 'APPROVED'
+    status: 'PENDING'
   },
   {
     id: "gid://shopify/Order/3811284549784",
@@ -30,7 +30,7 @@ export const DummyData: DummyData[] = [
     issueDate: '01/01/2016',
     purchaseDate: '02/10/2021',
     expirationDate: '01/01/2026',
-    status: 'REJECTED'
+    status: 'PENDING'
   },
 ];
 

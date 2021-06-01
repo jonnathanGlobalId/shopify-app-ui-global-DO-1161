@@ -43,4 +43,18 @@ const QUERY_ORDERS = gql`
   }
 }`;
 
-export {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_ORDERS};
+const QUERY_DRAFT_ORDERS = gql`
+  query {
+    draftOrders(first: 250) {
+      edges {
+        node {
+          id
+          email
+          name
+        }
+      }
+    }
+  }
+`;
+
+export {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_ORDERS, QUERY_DRAFT_ORDERS};
