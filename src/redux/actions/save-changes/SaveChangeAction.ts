@@ -16,20 +16,21 @@ export const saveChangeActions = () => {
       type: SAVE_GLOBAL_STATE
     });
     try {
-      const user_settings = getState().user.user;
-
+      const user_settings: OwnerCondition = getState().user.user;
+      console.log(user_settings);
       const access_token: string = await getAccessToken();
-      // await axios.put(`${GLOBAL_ID_API_URL}/owner/${owner_id}`, user_settings, {
-      //   headers: {
-      //     'Authorization': `Bearer ${access_token}`
-      //   }
-      // });
+      await axios.put(`${GLOBAL_ID_API_URL}/owner/${user_settings.owner_id}`, user_settings, {
+        headers: {
+          'Authorization': `Bearer ${access_token}`
+        }
+      });
 
       dispatch({
         type: SAVE_GLOBAL_STATE_SUCCESS,
         payload: user_settings
       });
     } catch (error) {
+      console.log('Hubo un problema al guardar las configuraciones del usuario')
       dispatch({
         type: SAVE_GLOBAL_STATE_FAILURE
       });

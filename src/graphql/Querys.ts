@@ -19,7 +19,6 @@ const QUERY_SHOPID = gql`
     shop {
       id
       name
-      url
       myshopifyDomain
     }
   }

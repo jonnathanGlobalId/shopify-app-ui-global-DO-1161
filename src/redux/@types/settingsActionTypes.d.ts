@@ -31,6 +31,7 @@ export interface GetUserInfoSuccess {
 
 export interface GetUserInfoFailure {
   readonly type: typeof GET_USER_INFO_FAILURE,
+  payload: OwnerCondition,
 }
 
 export interface ChangeConditionals {

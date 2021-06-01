@@ -6,9 +6,7 @@ import Shopify, { ApiVersion } from "@shopify/shopify-api";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
-import axios from "axios";
 const cors = require("koa-cors");
-import * as conf from "../conf";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -19,10 +17,10 @@ const app = next({
 const handle = app.getRequestHandler();
 
 Shopify.Context.initialize({
-  API_KEY: conf.SHOPIFY_API_KEY,
-  API_SECRET_KEY: conf.SHOPIFY_API_SECRET,
-  SCOPES: conf.SCOPES.split(","),
-  HOST_NAME: conf.HOST.replace(/https:\/\//, ""),
+  API_KEY: process.env.SHOPIFY_API_KEY,
+  API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
+  SCOPES: process.env.SCOPES.split(","),
+  HOST_NAME: process.env.HOST.replace(/https:\/\//, ""),
   API_VERSION: ApiVersion.October20,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
@@ -86,7 +84,6 @@ app.prepare().then(async () => {
       await Shopify.Webhooks.Registry.process(ctx.req, ctx.res);
       console.log(`Webhook processed, returned status code 200`);
     } catch (error) {
-      handleRequesthandleRequesthandleRequesthandleRequest;
       console.log(`Failed to process webhook: ${error}`);
     }
   });
@@ -108,5 +105,4 @@ app.prepare().then(async () => {
   server.listen(port, () => {
     console.log(`> Running on port: ${port}`);
   });
-  handleRequesthandleRequest;
 });

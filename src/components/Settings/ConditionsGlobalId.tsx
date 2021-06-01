@@ -4,18 +4,16 @@ import Switch from 'react-ios-switch';
 import {useSelector, useDispatch} from 'react-redux';
 import { userDispatch } from '../../redux/@types/settingsActionTypes';
 import {CHANGE_AMOUNT} from '../../redux/types';
+import { appState } from '../../redux/reducer';
 
-interface Conditions {
-  address: boolean;
-  amount: boolean;
-}
 
 const ConditionsGlobalId = () => {
   const dispatch: Dispatch<userDispatch> = useDispatch();
-  const userInfo = useSelector((state: any) => state.user);
-  const settingsUser = userInfo?.user?.settings;
+  const user = useSelector((state: appState) => state.user);
+  const userInfo: OwnerCondition = user.user;
 
-  const handleChangeconditions = (dataChange: Conditions) => {
+  const handleChangeconditions = (dataChange: OwnerCondition) => {
+    console.log(dataChange);
     dispatch({type: 'CHANGE_CONDITIONS', payload: dataChange});
   };
 
@@ -34,8 +32,8 @@ const ConditionsGlobalId = () => {
           >Require ID verification for orders when <b>Billing Address</b> does not match <b>Shipping Address?</b>
         </h4>
         <Switch
-          onChange={() => handleChangeconditions({...settingsUser, address: !settingsUser.address})}
-          checked={userInfo?.user?.settings?.address}
+          onChange={() => handleChangeconditions({...userInfo, different_address_enabled: !userInfo?.different_address_enabled})}
+          checked={userInfo?.different_address_enabled}
           onColor="#0D51FF"
         />
       </div>
@@ -44,13 +42,13 @@ const ConditionsGlobalId = () => {
           <h4 className="text-2xl">Require ID verification for orders above $ </h4>
           <input
             onChange={handleChangeLimitAmount}
-            value={userInfo?.user?.limit_amount}
+            value={userInfo?.order_amount_limit.toString()}
             className="w-24 border-2 border-blue-500 text-blue-500 text-center py-2 rounded-lg ml-3 font-semibold"
           />
         </div>
         <Switch
-          onChange={() => handleChangeconditions({...settingsUser, amount: !settingsUser.amount})}
-          checked={userInfo?.user?.settings?.amount}
+          onChange={() => handleChangeconditions({...userInfo, order_amount_limit_enabled: !userInfo?.order_amount_limit_enabled})}
+          checked={userInfo?.order_amount_limit_enabled}
           onColor="#0D51FF"
         />
       </div>

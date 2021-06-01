@@ -46,6 +46,7 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
     };
 
   case GET_USER_INFO_SUCCESS:
+  case GET_USER_INFO_FAILURE:
     return {
       ...state,
       user: action.payload,
@@ -56,7 +57,7 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
   case CHANGE_CONDITIONS:
     return {
       ...state,
-      user: {...state.user, settings: action.payload},
+      user: action.payload,
       isChanged: true,
     };
 
@@ -70,12 +71,11 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
   case CHANGE_AMOUNT:
     return {
       ...state,
-      user: {...state.user, limit_amount: action.payload},
+      user: {...state.user, order_amount_limit: action.payload},
       isChanged: true,
     };
 
   case SAVE_GLOBAL_STATE_FAILURE:
-  case GET_USER_INFO_FAILURE:
     return {
       ...state,
       error: true,

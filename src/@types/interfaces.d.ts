@@ -23,7 +23,16 @@ interface OrderHistory {
 }
 
 interface OwnerCondition {
-  limit_amount: Number,
-  limit_amount_enabled: boolean,
-  different_address_enabled: boolean,
+  owner_id: string;
+  name: string;
+  shop: string;
+  order_amount_limit: Number;
+  order_amount_limit_enabled: boolean;
+  different_address_enabled: boolean;
+}
+
+interface ShopInfoData {
+  id: string;
+  myshopifyDomain: string
+  name: string;
 }

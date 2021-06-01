@@ -15,7 +15,8 @@ import {NEXT_PUBLIC_SECRET, GLOBAL_ID_API_URL} from '../conf'
 
 const Index = () => {
   const [ownerId, setOwnerId] = useState<string>('');
-  const [shopNAme, setShopName] = useState<string>('');
+  const [shopName, setShopName] = useState<string>('');
+  const [shop, setShop] = useState<string>('');
 
   const dispatch = useDispatch();
   const userState = useSelector((state: appState) => state.user);
@@ -24,17 +25,27 @@ const Index = () => {
   const resShopId = useQuery(QUERY_SHOPID);
 
   useEffect(() => {
-    dispatch(getUSerInfoAction(ownerId));
-  }, []);
+    if (ownerId && shopName && shop){
+      const firstData: OwnerCondition = {
+        name: shopName,
+        owner_id: ownerId,
+        shop,
+        order_amount_limit_enabled: false,
+        different_address_enabled: false,
+        order_amount_limit: 0,
+      }
+      dispatch(getUSerInfoAction(ownerId, firstData));
+    }
+  }, [ownerId]);
 
   useEffect(() => {
     if(resShopId?.data !== undefined) {
       const userId = resShopId.data?.shop;
       const userIdArray: string = userId?.id.split('/');
       const id: string = userIdArray[4];
-      console.log(id);
       setOwnerId(id);
       setShopName(userId?.name);
+      setShop(userId?.myshopifyDomain);
       dispatch({
         type: GET_URL_SHOP,
         payload: userId?.url
