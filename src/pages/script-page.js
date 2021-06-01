@@ -1,53 +1,58 @@
-import gql from 'graphql-tag';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { Button, Card, Layout, Page, ResourceList, Stack } from '@shopify/polaris';
+import gql from "graphql-tag";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import {
+  Button,
+  Card,
+  Layout,
+  Page,
+  ResourceList,
+  Stack,
+} from "@shopify/polaris";
 
 const CREATE_SCRIPT_TAG = gql`
-    mutation scriptTagCreate($input: ScriptTagInput!) {
-        scriptTagCreate(input: $input) {
-            scriptTag {
-                id
-            }
-            userErrors {
-                field
-                message
-            }
-        }
+  mutation scriptTagCreate($input: ScriptTagInput!) {
+    scriptTagCreate(input: $input) {
+      scriptTag {
+        id
+      }
+      userErrors {
+        field
+        message
+      }
     }
+  }
 `;
 
 const QUERY_SCRIPTTAGS = gql`
-    query {
-        scriptTags(first: 5) {
-            edges {
-                node {
-                    id
-                    src
-                    displayScope
-                }
-            }
+  query {
+    scriptTags(first: 5) {
+      edges {
+        node {
+          id
+          src
+          displayScope
         }
+      }
     }
+  }
 `;
 
 const DELETE_SCRIPTTAG = gql`
-    mutation scriptTagDelete($id: ID!) {
-        scriptTagDelete(id: $id) {
-            deletedScriptTagId
-            userErrors {
-                field
-                message
-            }
-        }
+  mutation scriptTagDelete($id: ID!) {
+    scriptTagDelete(id: $id) {
+      deletedScriptTagId
+      userErrors {
+        field
+        message
+      }
     }
+  }
 `;
 
 function ScriptPage() {
-
   const [createScripts] = useMutation(CREATE_SCRIPT_TAG);
   const [deleteScripts] = useMutation(DELETE_SCRIPTTAG);
   const { loading, error, data } = useQuery(QUERY_SCRIPTTAGS);
-
 
   if (loading) return <div>Loading…</div>;
   if (error) return <div>{error.message}</div>;
@@ -57,9 +62,7 @@ function ScriptPage() {
       <Layout>
         <Layout.Section>
           <Card title="These are the Script Tags:" sectioned>
-            <p>
-              Create or Delete a Script Tag
-            </p>
+            <p>Create or Delete a Script Tag</p>
           </Card>
         </Layout.Section>
         <Layout.Section secondary>
@@ -67,7 +70,8 @@ function ScriptPage() {
             <Button
               primary
               size="slim"
-              type="submit" onClick={() => {
+              type="submit"
+              onClick={() => {
                 createScripts({
                   variables: {
                     input: {
@@ -87,41 +91,40 @@ function ScriptPage() {
           <Card>
             <ResourceList
               showHeader
-              resourceName={{ singular: 'Script', plural: 'Scripts' }}
+              resourceName={{ singular: "Script", plural: "Scripts" }}
               items={data.scriptTags.edges}
-              renderItem={item => {
+              renderItem={(item) => {
                 return (
-                  <ResourceList.Item
-                    id={item.id}
-                  >
+                  <ResourceList.Item id={item.id}>
                     <Stack>
                       <Stack.Item>
-                        <p>
-                          {item.node.id}
-                        </p>
+                        <p>{item.node.id}</p>
                       </Stack.Item>
                       <Stack.Item>
-                        <Button type='submit' onClick={() => {
-                          deleteScripts({
-                            variables: {
-                              id: item.node.id
-                            },
-                            refetchQueries: [{ query: QUERY_SCRIPTTAGS }]
-                          })
-                        }}>
+                        <Button
+                          type="submit"
+                          onClick={() => {
+                            deleteScripts({
+                              variables: {
+                                id: item.node.id,
+                              },
+                              refetchQueries: [{ query: QUERY_SCRIPTTAGS }],
+                            });
+                          }}
+                        >
                           Delete Script Tag
                         </Button>
                       </Stack.Item>
                     </Stack>
                   </ResourceList.Item>
-                )
+                );
               }}
             />
           </Card>
         </Layout.Section>
       </Layout>
     </Page>
-  )
+  );
 }
 
 export default ScriptPage;

@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import { userDispatch } from '../../redux/@types/settingsActionTypes';
 import {CHANGE_AMOUNT} from '../../redux/types';
 
-interface IContitionAuth {
+interface Conditions {
   address: boolean;
   amount: boolean;
 }
@@ -15,7 +15,7 @@ const ConditionsGlobalId = () => {
   const userInfo = useSelector((state: any) => state.user);
   const settingsUser = userInfo?.user?.settings;
 
-  const handleChangeconditions = (dataChange: IContitionAuth) => {
+  const handleChangeconditions = (dataChange: Conditions) => {
     dispatch({type: 'CHANGE_CONDITIONS', payload: dataChange});
   };
 
