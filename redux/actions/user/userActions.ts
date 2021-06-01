@@ -15,12 +15,10 @@ export const getUSerInfoAction = () => {
       });
       const result = await axios.get('https://shopify-fake-api.herokuapp.com/api/user-settings');
       dispatch({
-        type: GET_USER_INFO_SUCCESS, 
+        type: GET_USER_INFO_SUCCESS,
         payload: result.data.data
       });
     } catch (error) {
-      console.log(error);
-      console.log('Hubo un error en la accion de obtener usuario');
       dispatch({
         type: GET_USER_INFO_FAILURE
       });

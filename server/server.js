@@ -6,8 +6,8 @@ import Shopify, { ApiVersion } from "@shopify/shopify-api";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
-import axios from 'axios';
-const cors = require('koa-cors');
+import axios from "axios";
+const cors = require("koa-cors");
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -16,8 +16,6 @@ const app = next({
   dev,
 });
 const handle = app.getRequestHandler();
-
-let userToken = null;
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
@@ -60,28 +58,10 @@ app.prepare().then(async () => {
           );
         }
 
-        // Redirect to app with shop parameter upon auth
-        userToken = ctx.state.shopify
-        console.log('token', ctx.state.shopify.accessToken)
-        console.log('shop', ctx.state.shopify.shop);
-        try {
-          await axios.post('https://shopify-fake-api.herokuapp.com/api/user-auth', {token: ctx.state.shopify.accessToken, shop: ctx.state.shopify.shop})
-          console.log('Se mandaron los datos de la autenticación');
-        } catch (error) {
-          console.log(error);
-        }
         ctx.redirect(`/?shop=${shop}`);
       },
     })
   );
-
-  router.get('/token', async (ctx) => {
-    ctx.body = {
-      mensaje: 'Hola mundo ruta',
-      data: userToken,
-    };
-    console.log('token', ctx.state)
-  });
 
   const handleRequest = async (ctx) => {
     await handle(ctx.req, ctx.res);
@@ -105,6 +85,7 @@ app.prepare().then(async () => {
       await Shopify.Webhooks.Registry.process(ctx.req, ctx.res);
       console.log(`Webhook processed, returned status code 200`);
     } catch (error) {
+      handleRequesthandleRequesthandleRequesthandleRequest;
       console.log(`Failed to process webhook: ${error}`);
     }
   });
@@ -124,6 +105,7 @@ app.prepare().then(async () => {
   server.use(router.allowedMethods());
   server.use(router.routes());
   server.listen(port, () => {
-    console.log(`> Ready on http://localhost:${port}`);
+    console.log(`> Running on port: ${port}`);
   });
+  handleRequesthandleRequest;
 });

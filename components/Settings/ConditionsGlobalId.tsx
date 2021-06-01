@@ -3,11 +3,11 @@ import {Dispatch} from 'redux';
 import Switch from 'react-ios-switch';
 import {useSelector, useDispatch} from 'react-redux';
 import { userDispatch } from '../../redux/@types/settingsActionTypes';
-import {CHANGE_AMMOUNT} from '../../redux/types';
+import {CHANGE_AMOUNT} from '../../redux/types';
 
 interface IContitionAuth {
   address: boolean;
-  ammount: boolean;
+  amount: boolean;
 }
 
 const ConditionsGlobalId = () => {
@@ -19,11 +19,11 @@ const ConditionsGlobalId = () => {
     dispatch({type: 'CHANGE_CONDITIONS', payload: dataChange});
   };
 
-  const handleChangeLimitAmmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const ammount = Number(e.target.value);
+  const handleChangeLimitAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const amount = Number(e.target.value);
     dispatch({
-      type: CHANGE_AMMOUNT,
-      payload: ammount,
+      type: CHANGE_AMOUNT,
+      payload: amount,
     })
   };
 
@@ -41,16 +41,16 @@ const ConditionsGlobalId = () => {
       </div>
       <div className="flex justify-between my-10 items-center">
         <div className="flex items-center">
-          <h4 className="text-2xl">Require ID verification for orders above $ </h4> 
+          <h4 className="text-2xl">Require ID verification for orders above $ </h4>
           <input
-            onChange={handleChangeLimitAmmount}
-            value={userInfo?.user?.limit_ammount}
+            onChange={handleChangeLimitAmount}
+            value={userInfo?.user?.limit_amount}
             className="w-24 border-2 border-blue-500 text-blue-500 text-center py-2 rounded-lg ml-3 font-semibold"
           />
         </div>
         <Switch
-          onChange={() => handleChangeconditions({...settingsUser, ammount: !settingsUser.ammount})}
-          checked={userInfo?.user?.settings?.ammount}
+          onChange={() => handleChangeconditions({...settingsUser, amount: !settingsUser.amount})}
+          checked={userInfo?.user?.settings?.amount}
           onColor="#0D51FF"
         />
       </div>

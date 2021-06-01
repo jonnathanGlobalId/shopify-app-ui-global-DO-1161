@@ -17,13 +17,13 @@ const history = () => {
           </tr>
         </thead>
         <tbody>
-          {DummyTable.map((dummyData: DummyTable, index) => {
+          {DummyTable.map((order: OrderHistory, index) => {
             return(
-              <tr key={dummyData.id} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
-                <td className="py-4 px-8 text-2xl">{dummyData.name}</td>
-                <td className="py-4 px-8 text-2xl">{dummyData.purchase}</td>
-                <td className="py-4 px-8 text-2xl">{dummyData.status}</td>
-                <td className="py-4 px-8 text-2xl">{dummyData.verification}</td>
+              <tr key={order.id} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
+                <td className="py-4 px-8 text-2xl">{order.name}</td>
+                <td className="py-4 px-8 text-2xl">{order.purchase}</td>
+                <td className="py-4 px-8 text-2xl">{order.status}</td>
+                <td className="py-4 px-8 text-2xl">{order.verification}</td>
               </tr>
             );
           })}

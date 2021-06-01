@@ -1,12 +1,12 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Dispatch} from 'redux';
-import { ITChangeClientId, ITChangeShopName, userDispatch } from '../../redux/@types/settingsActionTypes';
+import { ChangeClientId, ChangeShopName, userDispatch } from '../../redux/@types/settingsActionTypes';
 import {CHANGE_CLIENT_GLOBALID} from '../../redux/types';
 
 const ConnectGlobalId = () => {
   const userinfo = useSelector((state: any) => state.user);
-  const dispatch: Dispatch<ITChangeClientId> = useDispatch();
+  const dispatch: Dispatch<ChangeClientId> = useDispatch();
 
   const handlechangeClientGlobalID = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
@@ -21,7 +21,7 @@ const ConnectGlobalId = () => {
         <h3
           className="font-bold text-gray-600 mb-5 block text-2xl"
         >Connect with youraccount to use GlobalID</h3>
-        <button 
+        <button
           className="bg-blue-600 py-6 text-white w-full rounded-full text-2xl font-bold shadow-2xl focus:outline-none"
         >Connect your GlobalID</button>
         <div className="mt-12">
@@ -33,7 +33,7 @@ const ConnectGlobalId = () => {
             onChange={handlechangeClientGlobalID}
             value={userinfo?.user?.global_client_id}
             className="rounded-lg bg-gray-200 w-full px-4 py-6 text-2xl mt-3 font-semibold"
-            type="text" 
+            type="text"
             placeholder="The KrutyKrab"
           />
         </div>

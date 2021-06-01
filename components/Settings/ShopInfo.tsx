@@ -2,11 +2,11 @@ import React, {useRef} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {CHANGE_SHOP_NAME} from '../../redux/types';
 import {Dispatch} from 'redux';
-import {ITChangeShopName} from '../../redux/@types/settingsActionTypes';
+import {ChangeShopName} from '../../redux/@types/settingsActionTypes';
 
 const ShopInfo = () => {
   const _inputFile = useRef(null);
-  const dispatch: Dispatch<ITChangeShopName> = useDispatch();
+  const dispatch: Dispatch<ChangeShopName> = useDispatch();
   const userInfo = useSelector((state: any) => state.user);
 
   const handleSubmitLogo = () => {
@@ -43,7 +43,7 @@ const ShopInfo = () => {
           </div>
           <div>
             <h3 className="font-bold text-black text-4xl"><span className="text-blue-600">Browse</span> to upload a logo</h3>
-            <p>Only transparent PNGs accepted. 
+            <p>Only transparent PNGs accepted.
                 Minimum 168x132 px or 14x11 mm (300 DPI)</p>
           </div>
         </div>

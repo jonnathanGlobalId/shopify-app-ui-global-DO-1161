@@ -7,19 +7,19 @@ import {
   SAVE_GLOBAL_STATE,
   SAVE_GLOBAL_STATE_SUCCESS,
   SAVE_GLOBAL_STATE_FAILURE,
-  CHANGE_AMMOUNT,
-  GETURL_SHOP
+  CHANGE_AMOUNT,
+  GET_URL_SHOP
 } from '../../types';
 
-interface ITinitialState {
-  user: null | ITDummyDataApi;
+interface initialState {
+  user: null | OwnerCondition;
   shopUrl: string;
   error: boolean;
   loading: boolean;
   isChanged: boolean;
 }
 
-const initialState: ITinitialState = {
+const initialState: initialState = {
   user: null,
   shopUrl: "",
   error: false,
@@ -27,7 +27,7 @@ const initialState: ITinitialState = {
   isChanged: false,
 };
 
-const userReducer = (state: ITinitialState = initialState, action: userDispatch) => {
+const userReducer = (state: initialState = initialState, action: userDispatch) => {
   switch (action.type) {
 
   case SAVE_GLOBAL_STATE:
@@ -60,10 +60,10 @@ const userReducer = (state: ITinitialState = initialState, action: userDispatch)
       isChanged: false,
     };
 
-  case CHANGE_AMMOUNT:
+  case CHANGE_AMOUNT:
     return {
       ...state,
-      user: {...state.user, limit_ammount: action.payload},
+      user: {...state.user, limit_amount: action.payload},
       isChanged: true,
     };
 
@@ -75,7 +75,7 @@ const userReducer = (state: ITinitialState = initialState, action: userDispatch)
       loading: false,
     };
 
-  case GETURL_SHOP:
+  case GET_URL_SHOP:
     return {
       ...state,
       shopUrl: action.payload

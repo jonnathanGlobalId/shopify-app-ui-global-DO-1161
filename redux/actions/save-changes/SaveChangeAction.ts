@@ -15,15 +15,12 @@ export const saveChangeActions = () => {
     });
     try {
       const user_settings = getState().user.user;
-      console.log('configuraciones del usuario', user_settings);
       await axios.post('https://shopify-fake-api.herokuapp.com/api/user-settings', user_settings);
       dispatch({
-        type: SAVE_GLOBAL_STATE_SUCCESS, 
+        type: SAVE_GLOBAL_STATE_SUCCESS,
         payload: user_settings
       });
     } catch (error) {
-      console.log(error);
-      console.log('Hubo un error en la accion de Salvar estado');
       dispatch({
         type: SAVE_GLOBAL_STATE_FAILURE
       });
