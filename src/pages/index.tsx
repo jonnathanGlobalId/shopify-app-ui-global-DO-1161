@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getUSerInfoAction} from '../redux/actions/user/userActions';
 import {appState} from '../redux/reducer';
 import {CREATE_SCRIPT_TAG} from '../graphql/Mutations';
-import {QUERY_SCRIPTTAGS, QUERY_SHOPID} from '../graphql/Querys';
+import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS} from '../graphql/Querys';
 import {useQuery, useMutation} from '@apollo/react-hooks';
 import {createHmac} from 'crypto';
 import moment from 'moment';
@@ -23,6 +23,7 @@ const Index = () => {
   const [createScripts] = useMutation(CREATE_SCRIPT_TAG);
   const resScriptag = useQuery(QUERY_SCRIPTTAGS);
   const resShopId = useQuery(QUERY_SHOPID);
+  const resDraftOrders = useQuery(QUERY_DRAFT_ORDERS);
 
   useEffect(() => {
     if (ownerId && shopName && shop){

@@ -27,22 +27,6 @@ const DELETE_SCRIPTTAG = gql`
 `;
 
 const ACCEPT_DRAFT_ORDER = gql`
-  mutation draftOrderComplete($input: DraftOrderDeleteInput!) {
-    draftOrderComplete(input: $input) {
-      draftOrder {
-        order {
-          nameid
-        }
-      }
-      userErrors {
-        message
-        field
-      }
-    }
-  }
-`;
-
-const REJECT_DRAFT_ORDER = gql`
   mutation draftOrderComplete($id: ID!) {
     draftOrderComplete(id: $id) {
       draftOrder {
@@ -54,6 +38,17 @@ const REJECT_DRAFT_ORDER = gql`
       userErrors {
         message
         field 
+      }
+    }
+  }
+`;
+
+const REJECT_DRAFT_ORDER = gql`
+  mutation rejectedOrder($input: DraftOrderDeleteInput!) {
+    draftOrderDelete(input: $input) {
+      deletedId
+      userErrors {
+        message
       }
     }
   }

@@ -1,6 +1,6 @@
 export const orderData: Order[] = [
   {
-    id: "gid://shopify/Order/3787963170968",
+    id: "3787963170968",
     customer: {
       name: 'Martin Jekyll',
       verified: 'Verified with Onfido',
@@ -13,7 +13,7 @@ export const orderData: Order[] = [
     status: 'APPROVED'
   },
   {
-    id: "gid://shopify/Order/3811284549784",
+    id: "3811284549784",
     customer: {
       name: 'Thomas Hyde',
       verified: 'Verified with Onfido',
@@ -26,7 +26,7 @@ export const orderData: Order[] = [
     status: 'PENDING'
   },
   {
-    id: "gid://shopify/Order/3850289676440",
+    id: "3850289676440",
     customer: {
       name: 'William Taraval',
       verified: 'Verified with Onfido',

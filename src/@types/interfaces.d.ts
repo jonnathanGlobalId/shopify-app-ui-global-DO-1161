@@ -5,7 +5,6 @@ interface Order {
   customer: Customer
   status: 'PENDING' | 'REJECTED' | 'APPROVED';
 }
-
 interface Customer {
   name: string;
   verified: string;

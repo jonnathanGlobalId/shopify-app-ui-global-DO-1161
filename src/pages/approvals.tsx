@@ -7,7 +7,7 @@ import { appState } from '../redux/reducer';
 
 const approvals = () => {
   const {orders} = useSelector((state: appState) => state.user)
-  console.log(orders);
+  console.log('Ordenes de la tienda', orders);
   return (
     <ApprovalLayout>
       <HeaderTitle title="Pending Approvals" subtitle="Approve or deny purchases" />

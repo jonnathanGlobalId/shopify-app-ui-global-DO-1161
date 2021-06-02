@@ -24,25 +24,6 @@ const QUERY_SHOPID = gql`
   }
 `;
 
-const QUERY_ORDERS = gql`
-  query {
-  orders(first: 5) {
-    edges {
-      node {
-        id
-        confirmed
-        createdAt
-        subtotalPriceSet {
-          shopMoney {
-            amount 
-            currencyCode
-          }
-        }
-      }
-    }
-  }
-}`;
-
 const QUERY_DRAFT_ORDERS = gql`
   query {
     draftOrders(first: 5) {
@@ -57,4 +38,4 @@ const QUERY_DRAFT_ORDERS = gql`
   }
 `;
 
-export {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_ORDERS, QUERY_DRAFT_ORDERS};
+export {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS};
