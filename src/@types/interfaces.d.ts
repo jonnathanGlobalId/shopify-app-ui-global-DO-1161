@@ -1,16 +1,23 @@
 interface Order {
   id: string;
-  purchaseId: string;
-  purchaseDate?: string;
+  order_id: string;
+  owner_id: string;
   customer: Customer
-  status: 'PENDING' | 'REJECTED' | 'APPROVED';
+  status: Status;
 }
 interface Customer {
+  customer_id: string;
   name: string;
-  verified: string;
-  birthday: string;
-  issueDate?: string;
-  expirationDate?:string;
+  verification_status: string;
+  date_of_birth: string;
+  issue_date?: string;
+  expiration_date?:string;
+}
+
+enum Status {
+  PENDING = 'PENDING',
+  REJECTED = 'REJECTED',
+  APPROVED = 'APPROVED'
 }
 
 interface OrderHistory {

@@ -18,11 +18,14 @@ export const CHANGE_CLIENT_GLOBALID = 'CHANGE_CLIENT_GLOBALID';
 //Type para ver la url del usuario
 export const GETURL_SHOP = 'GETURL_SHOP';
 
-//Type para obtener las ordenes
-export const GET_ORDERS = 'GET_ORDERS'
-
 //Types para añadir ordenes al state
 export const CHANGE_ORDER_STATUS = 'CHANGE_ORDER_STATUS';
 export const CHANGE_ORDER_STATUS_SUCCESS = 'CHANGE_ORDER_STATUS_SUCCESS';
 export const CHANGE_ORDER_STATUS_REJECT = 'CHANGE_ORDER_STATUS_REJECT';
+
+//Types para obtener las ordenes de la bd
+export const GET_ORDERS = 'GET_ORDERS';
+export const GET_ORDERS_SUCCESS = 'GET_ORDERS_SUCCESS';
+export const GET_ORDERS_REJECT = 'GET_ORDERS_REJECT';
+
 export const GET_URL_SHOP = 'GET_URL_SHOP';

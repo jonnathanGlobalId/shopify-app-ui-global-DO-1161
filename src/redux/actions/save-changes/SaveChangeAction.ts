@@ -18,12 +18,13 @@ export const saveChangeActions = () => {
     try {
       const user_settings: OwnerCondition = getState().user.user;
       console.log(user_settings);
-      const access_token: string = await getAccessToken();
-      await axios.put(`${GLOBAL_ID_API_URL}/owner/${user_settings.owner_id}`, user_settings, {
-        headers: {
-          'Authorization': `Bearer ${access_token}`
-        }
-      });
+      // const access_token: string = await getAccessToken();
+      // await axios.put(`${GLOBAL_ID_API_URL}/owner/${user_settings.owner_id}`, user_settings, {
+      //   headers: {
+      //     'Authorization': `Bearer ${access_token}`
+      //   }
+      // });
+      await axios.put('http:localhost:8080/api/change-user-settings-owner', user_settings);
 
       dispatch({
         type: SAVE_GLOBAL_STATE_SUCCESS,

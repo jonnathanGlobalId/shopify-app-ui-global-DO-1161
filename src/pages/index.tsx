@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import MainLayout from '../Layout/MainLayout';
-import {Dispatch} from 'redux';
 import {ConditionsGlobalId, HeaderTitle, SaveChanges} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUSerInfoAction} from '../redux/actions/user/userActions';
@@ -12,6 +11,7 @@ import {createHmac} from 'crypto';
 import moment from 'moment';
 import {GET_URL_SHOP} from '../redux/types';
 import {NEXT_PUBLIC_SECRET, GLOBAL_ID_API_URL} from '../conf'
+import { getOrdersAction } from '../redux/actions/orders/getOrdersActions';
 
 const Index = () => {
   const [ownerId, setOwnerId] = useState<string>('');
@@ -23,7 +23,6 @@ const Index = () => {
   const [createScripts] = useMutation(CREATE_SCRIPT_TAG);
   const resScriptag = useQuery(QUERY_SCRIPTTAGS);
   const resShopId = useQuery(QUERY_SHOPID);
-  const resDraftOrders = useQuery(QUERY_DRAFT_ORDERS);
 
   useEffect(() => {
     if (ownerId && shopName && shop){
@@ -36,6 +35,7 @@ const Index = () => {
         order_amount_limit: 0,
       }
       dispatch(getUSerInfoAction(ownerId, firstData));
+      dispatch(getOrdersAction(ownerId));
     }
   }, [ownerId]);
 

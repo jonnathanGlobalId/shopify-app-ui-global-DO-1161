@@ -11,6 +11,8 @@ import {
   CHANGE_ORDER_STATUS_SUCCESS,
   CHANGE_ORDER_STATUS_REJECT,
   GET_ORDERS,
+  GET_ORDERS_SUCCESS,
+  GET_ORDERS_REJECT,
   CHANGE_AMOUNT,
   GET_URL_SHOP,
 } from '../../types';
@@ -21,7 +23,7 @@ interface initialState {
   error: boolean;
   loading: boolean;
   isChanged: boolean;
-  orders: null | Order[];
+  orders: [] | Order[];
 }
 
 const initialState: initialState = {
@@ -30,7 +32,7 @@ const initialState: initialState = {
   error: false,
   loading: false,
   isChanged: false,
-  orders: null,
+  orders: [],
 };
 
 const userReducer = (state: initialState = initialState, action: userDispatch) => {
@@ -39,6 +41,7 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
   case CHANGE_ORDER_STATUS:
   case SAVE_GLOBAL_STATE:
   case GET_USER_INFO:
+  case GET_ORDERS:  
     return {
       ...state,
       loading: true,
@@ -46,7 +49,7 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
     };
 
   case GET_USER_INFO_SUCCESS:
-  case GET_USER_INFO_FAILURE:
+  case GET_USER_INFO_FAILURE:  
     return {
       ...state,
       user: action.payload,
@@ -76,6 +79,7 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
     };
 
   case SAVE_GLOBAL_STATE_FAILURE:
+  case GET_ORDERS_REJECT:
     return {
       ...state,
       error: true,
@@ -91,16 +95,15 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
   case CHANGE_ORDER_STATUS_SUCCESS:
     return {
       ...state,
-      orders: [...state.orders, {...action.payload}]
+      orders: action.payload
     }
 
   case CHANGE_ORDER_STATUS_REJECT:
     return {
       ...state,
-      orders: [...state.orders, {...action.payload}]
-    }
+    }  
 
-  case GET_ORDERS: 
+  case GET_ORDERS_SUCCESS: 
     return {
       ...state,
       orders: action.payload

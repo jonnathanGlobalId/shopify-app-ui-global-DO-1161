@@ -11,6 +11,11 @@ const CHANGE_ORDER_STATUS = 'CHANGE_ORDER_STATUS';
 const CHANGE_ORDER_STATUS_SUCCESS = 'CHANGE_ORDER_STATUS_SUCCESS';
 const CHANGE_ORDER_STATUS_REJECT = 'CHANGE_ORDER_STATUS_REJECT';
 
+
+const GET_ORDERS = 'GET_ORDERS';
+const GET_ORDERS_SUCCESS = 'GET_ORDERS_SUCCESS';
+const GET_ORDERS_REJECT = 'GET_ORDERS_REJECT';
+
 export interface SaveChanges {
   readonly type: typeof SAVE_GLOBAL_STATE,
 };
@@ -42,19 +47,26 @@ export interface ChangeConditionals {
   readonly type: typeof CHANGE_CONDITIONS,
   payload: OwnerSettings,
 }
-export interface GetOrders {
-  readonly type: typeof GET_ORDERS,
-  payload: Order[]
-}
 export interface changeStatusOrder {
   readonly type: typeof CHANGE_ORDER_STATUS,
 }
 export interface changeStatusOrderSuccess {
   readonly type: typeof CHANGE_ORDER_STATUS_SUCCESS,
-  payload: string
-}export interface changeStatusOrderFailure {
+  payload: Order[]
+}
+export interface changeStatusOrderFailure {
   readonly type: typeof CHANGE_ORDER_STATUS_REJECT,
-  payload: string,
+}
+
+export interface getOrders {
+  readonly type: typeof GET_ORDERS,
+}
+export interface getOrdersSuccess {
+  readonly type: typeof GET_ORDERS_SUCCESS,
+  payload: Order[]
+}
+export interface getOrdersFailure {
+  readonly type: typeof GET_ORDERS_REJECT,
 }
 
 
@@ -71,3 +83,4 @@ type userDispatch =
 export type GetInfoDispatchTypes = GetUserInfo | GetUserInfoFailure | GetUserInfoSuccess;
 export type UserDispatchTypes = SaveChanges | SaveChangesFailure | SaveChangesSuccess;
 export type OrderDispatchTypes = changeStatusOrder | changeStatusOrderFailure | changeStatusOrderSuccess;
+export type GetOrderDispatchTypes = getOrders | getOrdersSuccess | getOrdersFailure;

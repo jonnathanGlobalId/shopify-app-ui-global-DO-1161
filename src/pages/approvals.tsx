@@ -6,13 +6,13 @@ import {useSelector} from 'react-redux';
 import { appState } from '../redux/reducer';
 
 const approvals = () => {
-  const {orders} = useSelector((state: appState) => state.user)
-  console.log('Ordenes de la tienda', orders);
+  const userstate = useSelector((state: appState) => state.user)
+
   return (
     <ApprovalLayout>
       <HeaderTitle title="Pending Approvals" subtitle="Approve or deny purchases" />
-      {orderData.map((order: Order) => (
-        <UserApproval key={order.id} order={order} />
+      {userstate?.orders.map((order: Order, position: Number) => (
+        <UserApproval key={order.order_id} order={order} position={position} />
       ))}
     </ApprovalLayout>
   )
