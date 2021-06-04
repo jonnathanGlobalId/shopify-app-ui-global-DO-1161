@@ -24,6 +24,7 @@ export const changeStatusOrderAction = (status: Status, order_id: string, new_id
     const dataSend = {
       status,
       order_id: new_order_id,
+      purchase_dare: Date.now(),
     }
     try {
       await axios.put(`http://localhost:8080/api/order/change-status/${order_id}`, dataSend);

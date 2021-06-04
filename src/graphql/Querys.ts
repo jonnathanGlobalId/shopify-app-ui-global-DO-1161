@@ -32,6 +32,8 @@ const QUERY_DRAFT_ORDERS = gql`
           id
           email
           name
+          createdAt
+          completedAt
         }
       }
     }

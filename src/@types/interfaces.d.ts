@@ -11,7 +11,18 @@ interface Customer {
   verification_status: string;
   date_of_birth: string;
   issue_date?: string;
+  purchase_date?: string;
   expiration_date?:string;
+}
+
+interface DraftOrder {
+  node: {
+    completedAt: string;
+    createdAt: string;
+    email?: string;
+    id: string;
+    name: string;
+  }
 }
 
 enum Status {

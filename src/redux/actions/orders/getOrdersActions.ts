@@ -7,7 +7,7 @@ import {
   GET_ORDERS_REJECT,
 } from '../../types';
 
-export const getOrdersAction = (owner_id: string) => {
+export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => {
   return async (dispatch: Dispatch<GetOrderDispatchTypes>) => {
     dispatch({
       type: GET_ORDERS,
@@ -15,10 +15,21 @@ export const getOrdersAction = (owner_id: string) => {
     try {
       console.log('Buscando las ordenes', owner_id);
       const result = await axios.get(`http:localhost:8080/api/orders/${owner_id}`);
-      console.log(result.data.data);
+      const orderGlobal: Order[] = result.data.data;
+      const ordersCompleted: Order[] = [];
+      orderGlobal.forEach((order: Order) => {
+        draftOrders.forEach((draftOrder: DraftOrder) => {
+          const idDraftOrder = draftOrder.node.id.split('/')[4];
+          if (order.order_id.toString() === idDraftOrder.toString()) {
+            const orderComplete = {...order, customer: {...order.customer, purchase_date: draftOrder.node.createdAt}};
+            ordersCompleted.push(orderComplete);
+          }
+        });
+      });
+      
       dispatch({
         type: GET_ORDERS_SUCCESS,
-        payload: result.data.data
+        payload: ordersCompleted
       })
     } catch (error) {
       console.log('Hubo un problema para obtener las ordenes');

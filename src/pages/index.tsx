@@ -20,12 +20,14 @@ const Index = () => {
 
   const dispatch = useDispatch();
   const userState = useSelector((state: appState) => state.user);
-  const [createScripts] = useMutation(CREATE_SCRIPT_TAG);
+  const [createScripts] = useMutation(CREATE_SCRIPT_TAG, {onCompleted: (data) => console.log(data)});
   const resScriptag = useQuery(QUERY_SCRIPTTAGS);
   const resShopId = useQuery(QUERY_SHOPID);
+  const draftOrdersQuery = useQuery(QUERY_DRAFT_ORDERS);
 
   useEffect(() => {
-    if (ownerId && shopName && shop){
+    const draftOrders = draftOrdersQuery.data?.draftOrders?.edges;
+    if (ownerId && shopName && shop && draftOrders !== undefined){
       const firstData: OwnerCondition = {
         name: shopName,
         owner_id: ownerId,
@@ -35,9 +37,9 @@ const Index = () => {
         order_amount_limit: 0,
       }
       dispatch(getUSerInfoAction(ownerId, firstData));
-      dispatch(getOrdersAction(ownerId));
+      dispatch(getOrdersAction(ownerId, draftOrders));
     }
-  }, [ownerId]);
+  }, [ownerId, draftOrdersQuery.data]);
 
   useEffect(() => {
     if(resShopId?.data !== undefined) {
@@ -56,10 +58,12 @@ const Index = () => {
 
   useEffect(() => {
     if(resScriptag?.data !== undefined && resScriptag?.data.scriptTags.edges.length <= 0) {
+      console.log('vamos a crear un scripttag')
       createScripts({
         variables: {
           input: {
-            src: `${GLOBAL_ID_API_URL}/script-tag`,
+            //src: `${GLOBAL_ID_API_URL}/script-tag`,
+            src: 'https://shopify-fake-api.herokuapp.com/script',
             displayScope: "ALL",
           },
         },

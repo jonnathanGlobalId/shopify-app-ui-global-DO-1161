@@ -23,7 +23,6 @@ export const getUSerInfoAction = (owner_id: string, firstData: OwnerCondition) =
       //   } 
       // }); 
       const result = await axios.get(`http:localhost:8080/api/user-settings-owner/${owner_id}`);
-      console.log(result.data);
       dispatch({
         type: GET_USER_INFO_SUCCESS,
         payload: result.data.data 
@@ -37,6 +36,8 @@ export const getUSerInfoAction = (owner_id: string, firstData: OwnerCondition) =
         //     'Authorization': `Bearer ${access_token}`
         //   }
         // });
+        
+        firstData.shop = firstData.shop.split('.')[0];
         await axios.put(`http:localhost:8080/api/change-user-settings-owner`, firstData);
         dispatch({
           type: GET_USER_INFO_SUCCESS,

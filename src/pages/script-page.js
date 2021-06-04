@@ -9,6 +9,7 @@ import {
   Stack,
 } from "@shopify/polaris";
 import { GLOBAL_ID_API_URL } from "../conf";
+import MainLayout from '../Layout/MainLayout';
 
 const CREATE_SCRIPT_TAG = gql`
   mutation scriptTagCreate($input: ScriptTagInput!) {
@@ -51,7 +52,7 @@ const DELETE_SCRIPTTAG = gql`
 `;
 
 function ScriptPage() {
-  const [createScripts] = useMutation(CREATE_SCRIPT_TAG);
+  const [createScripts] = useMutation(CREATE_SCRIPT_TAG, {onCompleted: (data) => console.log(data)});
   const [deleteScripts] = useMutation(DELETE_SCRIPTTAG);
   const { loading, error, data } = useQuery(QUERY_SCRIPTTAGS);
 
@@ -59,7 +60,7 @@ function ScriptPage() {
   if (error) return <div>{error.message}</div>;
 
   return (
-    <Page>
+    <MainLayout>
       <Layout>
         <Layout.Section>
           <Card title="These are the Script Tags:" sectioned>
@@ -76,7 +77,7 @@ function ScriptPage() {
                 createScripts({
                   variables: {
                     input: {
-                      src: `${GLOBAL_ID_API_URL}/script-tag`,
+                      src: `https://shopify-fake-api.herokuapp.com/script`,
                       displayScope: "ALL",
                     },
                   },
@@ -124,7 +125,7 @@ function ScriptPage() {
           </Card>
         </Layout.Section>
       </Layout>
-    </Page>
+    </MainLayout>
   );
 }
 

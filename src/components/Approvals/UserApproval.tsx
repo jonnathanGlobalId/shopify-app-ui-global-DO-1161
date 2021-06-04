@@ -22,7 +22,7 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
   const userState = useSelector((state:appState) => state.user);
   const dispatch = useDispatch();
   const { order_id, customer, status } = order;
-  const { name, verification_status, date_of_birth, issue_date, expiration_date } = customer
+  const { name, verification_status, date_of_birth, issue_date, expiration_date, purchase_date } = customer
   const [showContent, setShowContent] = useState(false);
   const [approveOrder] = useMutation(ACCEPT_DRAFT_ORDER, 
     {
@@ -82,9 +82,9 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
               <h3 className="text-4xl text-gray-500 font-bold mb-8">Purchase ID</h3>
               <a 
                 target="blank" 
-                href={`https://${userState?.user?.shop}/admin/${status === 'PENDING' ? 'draft_orders' : 'orders'}/${order_id}`} 
+                href={`https://${userState?.user?.shop}.myshopify.com/admin/${status === 'PENDING' ? 'draft_orders' : 'orders'}/${order_id}`} 
                 className="underline text-3xl text-blue-500 cursor-pointer"
-              >{ Status.REJECTED ? null : order_id}</a>
+              >{ order_id}</a>
             </div>
           </div>
         {/* Contenido oculto */}
@@ -92,7 +92,7 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
           <HideContent
             issueDate={issue_date}
             expirationDate={expiration_date}
-            purchaseDate ={issue_date}
+            purchaseDate ={purchase_date}
           />
         </div>
         {/* Contenido oculto */}
