@@ -5,6 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {changeStatusOrderAction} from '../../redux/actions/orders/changeStatusOrderAction';
 import {useMutation} from '@apollo/react-hooks';
 import {ACCEPT_DRAFT_ORDER, REJECT_DRAFT_ORDER} from '../../graphql/Mutations';
+import {CHANGE_ORDER_STATUS_REJECT} from '../../redux/types';
 import moment from 'moment';
 interface PropsUserData {
   order?: Order
@@ -23,28 +24,38 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
   const { order_id, customer, status } = order;
   const { name, verification_status, date_of_birth, issue_date, expiration_date } = customer
   const [showContent, setShowContent] = useState(false);
-  const [approveOrder] = useMutation(ACCEPT_DRAFT_ORDER, {onError: (data) => console.log('hubo un error', data)});
-  const [rejectOrder] = useMutation(REJECT_DRAFT_ORDER, {onError: (data) => console.log('hubo un error', data)});
+  const [approveOrder] = useMutation(ACCEPT_DRAFT_ORDER, 
+    {
+      onError: () => dispatch({type: CHANGE_ORDER_STATUS_REJECT}), 
+      onCompleted: (data) => dispatch(changeStatusOrderAction(Status.APPROVED, order_id, data?.draftOrderComplete?.draftOrder?.order?.id))
+    }
+  );
+  const [rejectOrder] = useMutation(REJECT_DRAFT_ORDER, 
+    {
+      onError: () => dispatch({type: CHANGE_ORDER_STATUS_REJECT}), 
+      onCompleted: (data) => dispatch(changeStatusOrderAction(Status.REJECTED, order_id, data?.draftOrderDelete?.deletedId))
+    }
+  );
 
   const changeStatusOrder = (status: Status) => {
-    dispatch(changeStatusOrderAction(status, order_id));
-    // if (status === 'REJECTED') {
-    //   rejectOrder({
-    //     variables: {
-    //       input: {
-    //         id: `gid://shopify/DraftOrder/${order_id + "hbisjdbcj"}`,
-    //       }
-    //     }
-    //   })
-    //   return;
-    // };
-    // if (status === 'APPROVED') {
-    //   approveOrder({
-    //     variables: {
-    //       id: `gid://shopify/DraftOrder/${order_id + "lhbsdljsblj"}`,
-    //     }
-    //   })
-    // }
+    // dispatch(changeStatusOrderAction(Status.APPROVED, order_id, ''));
+    if (status === Status.REJECTED) {
+      rejectOrder({
+        variables: {
+          input: {
+            id: `gid://shopify/DraftOrder/${order_id}`,
+          }
+        }
+      })
+      return;
+    };
+    if (status === Status.APPROVED) {
+      approveOrder({
+        variables: {
+          id: `gid://shopify/DraftOrder/${order_id}`,
+        }
+      })
+    }
   }
 
   return (
@@ -69,7 +80,11 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
             </div>
             <div>
               <h3 className="text-4xl text-gray-500 font-bold mb-8">Purchase ID</h3>
-              <a target="blank" href={`https://${userState?.user?.shop}/admin/${status === 'PENDING' ? 'draft_orders' : 'orders'}/${order_id}`} className="underline text-3xl text-blue-500 cursor-pointer">{order_id}</a>
+              <a 
+                target="blank" 
+                href={`https://${userState?.user?.shop}/admin/${status === 'PENDING' ? 'draft_orders' : 'orders'}/${order_id}`} 
+                className="underline text-3xl text-blue-500 cursor-pointer"
+              >{ Status.REJECTED ? null : order_id}</a>
             </div>
           </div>
         {/* Contenido oculto */}

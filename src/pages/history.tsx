@@ -1,9 +1,12 @@
 import React from 'react';
 import {HeaderTitle} from '../components';
 import MainLayout from '../Layout/MainLayout'
-import {DummyTable} from '../utils/orderData';
+import {useSelector} from 'react-redux';
+import { appState } from '../redux/reducer';
+import moment from 'moment';
 
 const history = () => {
+  const ordersState = useSelector((state: appState) => state.user.orders);
   return (
     <MainLayout>
       <HeaderTitle title="History" subtitle="Customers you approve or deny will appear here" />
@@ -17,13 +20,13 @@ const history = () => {
           </tr>
         </thead>
         <tbody>
-          {DummyTable.map((order: OrderHistory, index) => {
+          {ordersState.map((order: Order, index) => {
             return(
-              <tr key={order.id} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
-                <td className="py-4 px-8 text-2xl">{order.name}</td>
-                <td className="py-4 px-8 text-2xl">{order.purchase}</td>
-                <td className="py-4 px-8 text-2xl">{order.status}</td>
-                <td className="py-4 px-8 text-2xl">{order.verification}</td>
+              <tr key={order.order_id} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
+                <td className="py-4 px-8 text-2xl">{order.customer.name}</td>
+                <td className="py-4 px-8 text-2xl">{moment(order.customer.issue_date).format("DD/MM/YYYY")}</td>
+                <td className="py-4 px-8 text-2xl">{order.customer.verification_status}</td>
+                <td className="py-4 px-8 text-2xl">{order.status.toLowerCase()}</td>
               </tr>
             );
           })}
