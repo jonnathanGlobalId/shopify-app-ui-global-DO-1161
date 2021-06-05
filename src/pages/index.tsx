@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import MainLayout from '../Layout/MainLayout';
-import {ConditionsGlobalId, HeaderTitle, SaveChanges} from '../components';
+import {ConditionsGlobalId, HeaderTitle, SaveChanges, Loader} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUSerInfoAction} from '../redux/actions/user/userActions';
 import {appState} from '../redux/reducer';
@@ -25,8 +25,11 @@ const Index = () => {
   const resShopId = useQuery(QUERY_SHOPID);
   const draftOrdersQuery = useQuery(QUERY_DRAFT_ORDERS);
 
+  console.log(userState);
+
   useEffect(() => {
     const draftOrders = draftOrdersQuery.data?.draftOrders?.edges;
+    console.log(draftOrders);
     if (ownerId && shopName && shop && draftOrders !== undefined){
       const firstData: OwnerCondition = {
         name: shopName,
@@ -83,6 +86,7 @@ const Index = () => {
 
   return (
     <>
+      <Loader show={draftOrdersQuery.loading} />
       <MainLayout>
         <HeaderTitle title="Settings" subtitle="Reduce risk and eliminate fraud with free customer ID verification" />
         <div>

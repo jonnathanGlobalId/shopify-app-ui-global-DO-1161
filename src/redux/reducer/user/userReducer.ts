@@ -15,6 +15,7 @@ import {
   GET_ORDERS_REJECT,
   CHANGE_AMOUNT,
   GET_URL_SHOP,
+  GET_PENDING_ORDERS,
 } from '../../types';
 
 interface initialState {
@@ -24,6 +25,7 @@ interface initialState {
   loading: boolean;
   isChanged: boolean;
   orders: [] | Order[];
+  pending_orders: [] | Order[];
 }
 
 const initialState: initialState = {
@@ -33,6 +35,7 @@ const initialState: initialState = {
   loading: false,
   isChanged: false,
   orders: [],
+  pending_orders: [],
 };
 
 const userReducer = (state: initialState = initialState, action: userDispatch) => {
@@ -107,6 +110,12 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
     return {
       ...state,
       orders: action.payload
+    }
+
+  case GET_PENDING_ORDERS:
+    return {
+      ...state,
+      pending_orders: action.payload
     }
 
   default:

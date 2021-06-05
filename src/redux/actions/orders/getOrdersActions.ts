@@ -5,6 +5,7 @@ import {
   GET_ORDERS,
   GET_ORDERS_SUCCESS,
   GET_ORDERS_REJECT,
+  GET_PENDING_ORDERS,
 } from '../../types';
 
 export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => {
@@ -13,7 +14,6 @@ export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => 
       type: GET_ORDERS,
     });
     try {
-      console.log('Buscando las ordenes', owner_id);
       const result = await axios.get(`http:localhost:8080/api/orders/${owner_id}`);
       const orderGlobal: Order[] = result.data.data;
       const ordersCompleted: Order[] = [];
@@ -29,6 +29,10 @@ export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => 
       
       dispatch({
         type: GET_ORDERS_SUCCESS,
+        payload: orderGlobal
+      });
+      dispatch({
+        type: GET_PENDING_ORDERS,
         payload: ordersCompleted
       })
     } catch (error) {

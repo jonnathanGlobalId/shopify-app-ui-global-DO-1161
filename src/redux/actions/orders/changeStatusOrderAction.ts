@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import {Dispatch} from 'redux';
 import {OrderDispatchTypes} from '../../@types/settingsActionTypes';
 import { appState } from '../../reducer';
@@ -30,7 +31,7 @@ export const changeStatusOrderAction = (status: Status, order_id: string, new_id
       await axios.put(`http://localhost:8080/api/order/change-status/${order_id}`, dataSend);
       const array: Order[] = getState().user.orders;
       const index = array.findIndex((order: Order) => order.order_id === order_id);
-      array[index] = {...array[index], status: status, order_id: dataSend.order_id}
+      array[index] = {...array[index], status: status, order_id: dataSend.order_id, customer: {...array[index].customer, purchase_date: moment().toISOString()}}
       console.log(array);
       dispatch({
         type: CHANGE_ORDER_STATUS_SUCCESS,

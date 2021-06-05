@@ -14,4 +14,5 @@ export {UserApproval, HideContent}
 
 //UI components
 import SaveChanges from './ui/SaveChanges';
-export { SaveChanges };
+import Loader from './ui/Loader';
+export { SaveChanges, Loader };

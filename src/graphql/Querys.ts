@@ -26,7 +26,7 @@ const QUERY_SHOPID = gql`
 
 const QUERY_DRAFT_ORDERS = gql`
   query {
-    draftOrders(first: 5) {
+    draftOrders(first: 250, query: "OPEN") {
       edges {
         node {
           id
@@ -34,6 +34,7 @@ const QUERY_DRAFT_ORDERS = gql`
           name
           createdAt
           completedAt
+          status
         }
       }
     }

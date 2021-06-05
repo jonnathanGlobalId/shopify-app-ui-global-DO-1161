@@ -28,4 +28,7 @@ export const GET_ORDERS = 'GET_ORDERS';
 export const GET_ORDERS_SUCCESS = 'GET_ORDERS_SUCCESS';
 export const GET_ORDERS_REJECT = 'GET_ORDERS_REJECT';
 
+//Types para obtener las ordenes pendientes
+export const GET_PENDING_ORDERS = 'GET_PENDING_ORDERS';
+
 export const GET_URL_SHOP = 'GET_URL_SHOP';
