@@ -25,14 +25,14 @@ export const changeStatusOrderAction = (status: Status, order_id: string, new_id
     const dataSend = {
       status,
       order_id: new_order_id,
-      purchase_dare: Date.now(),
+      purchase_date: Date.now(),
     }
     try {
       await axios.put(`http://localhost:8080/api/order/change-status/${order_id}`, dataSend);
       const array: Order[] = getState().user.orders;
       const index = array.findIndex((order: Order) => order.order_id === order_id);
       array[index] = {...array[index], status: status, order_id: dataSend.order_id, customer: {...array[index].customer, purchase_date: moment().toISOString()}}
-      console.log(array);
+      console.log('Nueva información de la orden', array[index], array);
       dispatch({
         type: CHANGE_ORDER_STATUS_SUCCESS,
         payload: array,

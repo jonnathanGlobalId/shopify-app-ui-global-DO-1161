@@ -25,6 +25,7 @@ const Index = () => {
   const resShopId = useQuery(QUERY_SHOPID);
   const draftOrdersQuery = useQuery(QUERY_DRAFT_ORDERS);
 
+  console.log(draftOrdersQuery.data?.draftOrders?.edges)
   console.log(userState);
 
   useEffect(() => {

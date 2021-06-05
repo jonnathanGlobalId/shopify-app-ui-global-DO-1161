@@ -21,6 +21,7 @@ export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => 
         draftOrders.forEach((draftOrder: DraftOrder) => {
           const idDraftOrder = draftOrder.node.id.split('/')[4];
           if (order.order_id.toString() === idDraftOrder.toString()) {
+            console.log('Ordenenes que son iguales', order.order_id, idDraftOrder);
             const orderComplete = {...order, customer: {...order.customer, purchase_date: draftOrder.node.createdAt}};
             ordersCompleted.push(orderComplete);
           }
