@@ -53,7 +53,10 @@ export interface changeStatusOrder {
 }
 export interface changeStatusOrderSuccess {
   readonly type: typeof CHANGE_ORDER_STATUS_SUCCESS,
-  payload: Order[]
+  payload: {
+    orders: Order[],
+    pending_orders: Orders[]
+  }
 }
 export interface changeStatusOrderFailure {
   readonly type: typeof CHANGE_ORDER_STATUS_REJECT,

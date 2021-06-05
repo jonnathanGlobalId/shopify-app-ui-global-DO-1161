@@ -38,7 +38,7 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
   );
 
   const changeStatusOrder = (status: Status) => {
-    // dispatch(changeStatusOrderAction(Status.APPROVED, order_id, ''));
+    // dispatch(changeStatusOrderAction(status, order_id, '0987654321'));
     if (status === Status.REJECTED) {
       rejectOrder({
         variables: {
@@ -57,6 +57,8 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
       })
     }
   }
+
+  console.log('Desde la lista', order, order_id);
 
   return (
     <>
