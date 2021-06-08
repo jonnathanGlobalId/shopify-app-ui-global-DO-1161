@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "shopify-app-ui.fullname" . }}
+  labels:
+    app: {{ include "shopify-app-ui.name" . }}
+    chart: {{ include "shopify-app-ui.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: {{ include "shopify-app-ui.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+{{ toYaml .Values.annotations | indent 8 }}
+      labels:
+        app: {{ include "shopify-app-ui.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.health.liveliness.path }}
+              port: {{ .Values.health.port }}
+            initialDelaySeconds: {{ .Values.health.initialDelaySeconds }}
+            periodSeconds: {{ .Values.health.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.health.readiness.path }}
+              port: {{ .Values.health.port }}
+            initialDelaySeconds: {{ .Values.health.initialDelaySeconds }}
+            periodSeconds: {{ .Values.health.periodSeconds }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.health.startup.path }}
+              port: {{ .Values.health.port }}
+            initialDelaySeconds: {{ .Values.health.initialDelaySeconds }}
+            periodSeconds: {{ .Values.health.periodSeconds }}
+            failureThreshold: {{ .Values.health.failureThreshold }}
+          ports:
+            - name: mainport
+              containerPort: {{ .Values.service.port }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+{{ toYaml .Values.volumeMounts | indent 12 }}
+          envFrom:
+            - configMapRef:
+                name: shared-config
+          env:
+          - name: SERVER_PORT
+            value: "{{ .Values.service.port }}"
+          - name: SHOPIFY_API_KEY
+{{ toYaml .Values.shopifyApiKey | indent 12 }}
+          - name: SHOPIFY_API_SECRET
+{{ toYaml .Values.shopifyApiSecret | indent 12 }}
+          - name: ENCRYPTION_SECRET
+{{ toYaml .Values.encryptionSecret | indent 12 }}
+          - name: APP_CLIENT_ID
+{{ toYaml .Values.appClientId | indent 12 }}
+          - name: APP_CLIENT_SECRET
+{{ toYaml .Values.appClientSecret | indent 12 }}
+          - name: GLOBAL_ID_API_URL
+{{ toYaml .Values.globalidApiUrl | indent 12 }}
+          - name: GLOBAL_ID_DOMAIN
+{{ toYaml .Values.globalidDomain | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

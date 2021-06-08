@@ -28,7 +28,7 @@ export const getOneTimeUrl = async (ctx) => {
   const { client } = ctx;
   const confirmationUrl = await client
     .mutate({
-      mutation: ONETIME_CREATE(process.env.HOST),
+      mutation: ONETIME_CREATE(HOST),
     })
     .then((response) => response.data.appPurchaseOneTimeCreate.confirmationUrl);
   return ctx.redirect(confirmationUrl);

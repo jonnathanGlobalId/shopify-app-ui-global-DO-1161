@@ -10,7 +10,7 @@ import {useQuery, useMutation} from '@apollo/react-hooks';
 import {createHmac} from 'crypto';
 import moment from 'moment';
 import {GET_URL_SHOP} from '../redux/types';
-import {NEXT_PUBLIC_SECRET, GLOBAL_ID_API_URL} from '../conf'
+import {ENCRYPTION_SECRET, GLOBAL_ID_API_URL} from '../conf'
 import { getOrdersAction } from '../redux/actions/orders/getOrdersActions';
 
 const Index = () => {
@@ -78,7 +78,7 @@ const Index = () => {
 
   useEffect(() => {
     if(resScriptag?.data !== undefined && resScriptag?.data.scriptTags.edges.length > 0 && resShopId?.data !== undefined) {
-      const secret = NEXT_PUBLIC_SECRET;
+      const secret = ENCRYPTION_SECRET;
       const epoch = (moment().unix()).toString();
       const hmac = createHmac('sha256', `${ownerId}-${secret}`).update(epoch);
     }

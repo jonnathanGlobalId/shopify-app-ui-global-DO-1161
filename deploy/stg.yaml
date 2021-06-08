@@ -1,0 +1,10 @@
+awsRegion: "eu-west-1"
+replicaCount: "2"
+annotations:
+  iam.amazonaws.com/role: arn:aws:iam::715299534867:role/gid-staging-shopify-app-ui-api
+
+globalidApiUrl:
+  value: "https://api.globalid.construction"
+
+globalidAcrcId:
+  value: '4d8f8833-02d8-451d-9b9d-de079532fae3'

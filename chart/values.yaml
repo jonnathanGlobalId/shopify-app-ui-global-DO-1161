@@ -1,0 +1,57 @@
+# Default values for shopify-app-ui.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image: 715299534867.dkr.ecr.us-east-1.amazonaws.com/shopify-app-ui:latest
+imagePullPolicy: IfNotPresent
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "50m"
+  limits:
+    memory: "192Mi"
+    cpu: "150m"
+
+awsRole: "dev-shopify-app-ui"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+shopifyApiKey:
+  valueFrom:
+    secretKeyRef:
+      name: shopify-app-ui
+      key: shopify-api-key
+
+shopifyApiSecret:
+  valueFrom:
+    secretKeyRef:
+      name: shopify-app-ui
+      key: shopify-api-secret
+
+encryptionSecret:
+  valueFrom:
+    secretKeyRef:
+      name: shopify-app-ui
+      key: encryption-secret
+
+appClientId:
+  valueFrom:
+    secretKeyRef:
+      name: shopify-app-ui
+      key: app-client-id
+
+appClientSecret:
+  valueFrom:
+    secretKeyRef:
+      name: shopify-app-ui
+      key: app-client-secret
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
