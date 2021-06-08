@@ -1,0 +1,50 @@
+image: registry.gitlab.com/globalid/infrastructure/container-images/node-14-builder:latest
+
+include:
+  - project: 'globalid/infrastructure/gitlab-ci'
+    ref: master
+    file:
+      - '/include/docker-image.yaml'
+      - '/include/helm-manifest.yaml'
+      - '/include/kubernetes-deploy-job.yaml'
+
+before_script:
+  - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}">.npmrc
+
+stages:
+- setup
+- quality
+- build
+- deploy
+- promote
+
+cache:
+  untracked: false
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+  - node_modules/
+
+setup:
+  tags:
+    - globalid
+  stage: setup
+  script:
+    - npm install
+  allow_failure: false
+
+test:
+  stage: quality
+  tags:
+    - globalid
+  variables:
+    HOST: bla
+    SCOPES: write_products,write_customers,write_draft_orders,read_script_tags,write_script_tags
+    SHOPIFY_API_KEY: bla
+    SHOPIFY_API_SECRET: bla
+    APP_CLIENT_ID: bla
+    APP_CLIENT_SECRET: bla
+    GLOBAL_ID_API_URL: 'https://apps.globalid.dev/v1/shopify-plugin'
+    GLOBAL_ID_DOMAIN: 'https://api.globalid.dev'
+    ENCRYPTION_SECRET: bla
+  script:
+    - npm i
