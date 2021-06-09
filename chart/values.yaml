@@ -50,6 +50,19 @@ appClientSecret:
       name: shopify-app-ui
       key: app-client-secret
 
+
+health:
+  liveliness:
+    path: '/health/alive'
+  readiness:
+    path: '/health/ready'
+  startup:
+    path: '/health/status'
+  port: 8800
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  failureThreshold: 10
+
 nodeSelector: {}
 
 tolerations: []
