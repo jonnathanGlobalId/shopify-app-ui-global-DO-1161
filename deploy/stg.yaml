@@ -1,7 +1,7 @@
 awsRegion: "eu-west-1"
 replicaCount: "2"
 annotations:
-  iam.amazonaws.com/role: arn:aws:iam::715299534867:role/gid-staging-shopify-app-ui-api
+  iam.amazonaws.com/role: arn:aws:iam::715299534867:role/gid-staging-shopify-app-ui
 
 globalidApiUrl:
   value: "https://api.globalid.construction"

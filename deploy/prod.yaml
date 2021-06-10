@@ -3,7 +3,7 @@ s3FilesBucket:
 awsRegion: "us-west-2"
 replicaCount: "2"
 annotations:
-  iam.amazonaws.com/role: arn:aws:iam::715299534867:role/gid-prod-shopify-app-ui-api
+  iam.amazonaws.com/role: arn:aws:iam::715299534867:role/gid-prod-shopify-app-ui
 
 globalidApiUrl:
   value: 'https://api.globalid.id'
