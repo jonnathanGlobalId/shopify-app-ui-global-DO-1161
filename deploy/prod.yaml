@@ -5,8 +5,8 @@ replicaCount: "2"
 annotations:
   iam.amazonaws.com/role: arn:aws:iam::715299534867:role/gid-prod-shopify-app-ui
 
-globalidApiUrl:
-  value: 'https://api.globalid.id'
+globalidDomain:
+  value: 'https://api.global.id'
 
-globalidAcrcId:
-  value: '4d8f8833-02d8-451d-9b9d-de079532fae3'
+globalidApiUrl:
+  value: 'https://apps.global.id'

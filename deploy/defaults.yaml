@@ -2,8 +2,8 @@ replicaCount: "1"
 annotations:
   iam.amazonaws.com/role: arn:aws:iam::715299534867:role/gid-dev-shopify-app-ui-api
 
-globalidApiUrl:
+globalidDomain:
   value: 'https://api.globalid.dev'
 
-shopifyProxyAppPath:
-  value: '/apps/globalid'
+globalidApiUrl:
+  value: 'https://apps.globalid.dev'
