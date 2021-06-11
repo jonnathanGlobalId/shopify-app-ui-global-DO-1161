@@ -1,5 +1,5 @@
 {
-  "name": "shopify-app-node",
+  "name": "shopify-app-ui",
   "version": "1.0.0",
   "engines": {
     "node": "14.x"
@@ -15,8 +15,8 @@
     "type": "git",
     "url": "git+https://github.com/Shopify/shopify-app-node.git"
   },
-  "author": "Shopify Inc.",
-  "license": "MIT",
+  "author": "GlobalID",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/shopify/shopify-app-node/issues"
   },
@@ -56,7 +56,7 @@
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
-    "shopify-nextjs-toolbox": "*",
+    "shopify-nextjs-toolbox": "^0.2.0-beta.1",
     "webpack": "^4.44.1"
   },
   "devDependencies": {
