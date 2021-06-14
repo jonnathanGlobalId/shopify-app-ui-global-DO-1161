@@ -14,3 +14,6 @@ scopes:
 
 host:
   value: 'http://example.com/'
+
+babelDisableCache:
+  value: 1
