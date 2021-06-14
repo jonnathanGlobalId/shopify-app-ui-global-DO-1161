@@ -62,10 +62,14 @@ spec:
           env:
           - name: SERVER_PORT
             value: "{{ .Values.service.port }}"
+          - name: HOST
+{{ toYaml .Values.host | indent 12 }}
           - name: SHOPIFY_API_KEY
 {{ toYaml .Values.shopifyApiKey | indent 12 }}
           - name: SHOPIFY_API_SECRET
 {{ toYaml .Values.shopifyApiSecret | indent 12 }}
+          - name: SCOPES
+{{ toYaml .Values.scopes | indent 12 }}
           - name: ENCRYPTION_SECRET
 {{ toYaml .Values.encryptionSecret | indent 12 }}
           - name: APP_CLIENT_ID
