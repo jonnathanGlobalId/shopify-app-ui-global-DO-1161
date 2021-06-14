@@ -10,3 +10,9 @@ globalidDomain:
 
 globalidApiUrl:
   value: 'https://apps.global.id'
+
+scopes:
+  value: 'write_products,write_customers,write_draft_orders,read_script_tags,write_script_tags'
+
+host:
+  value: 'http://example.com/'
