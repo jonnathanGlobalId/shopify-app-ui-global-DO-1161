@@ -18,4 +18,4 @@ host:
   value: 'http://example.com/'
 
 babelDisableCache:
-  value: 1
+  value: '1'
