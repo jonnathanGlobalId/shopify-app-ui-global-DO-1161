@@ -96,6 +96,18 @@ app.prepare().then(async () => {
     }
   );
 
+  router.get("/health/alive", (ctx) => {
+    ctx.status = 200;
+  });
+
+  router.get("/health/ready", (ctx) => {
+    ctx.status = 200;
+  });
+
+  router.get("/health/status", (ctx) => {
+    ctx.status = 200;
+  });
+
   router.get("(/_next/static/.*)", handleRequest); // Static content is clear
   router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
   router.get("(.*)", verifyRequest(), handleRequest); // Everything else must have sessions
