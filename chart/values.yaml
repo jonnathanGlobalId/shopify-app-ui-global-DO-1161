@@ -53,11 +53,11 @@ appClientSecret:
 
 health:
   liveliness:
-    path: '/health/alive'
+    path: '/v1/shopify-app-ui/health/alive'
   readiness:
-    path: '/health/ready'
+    path: '/v1/shopify-app-ui/health/ready'
   startup:
-    path: '/health/status'
+    path: '/v1/shopify-app-ui/health/status'
   port: 8080
   initialDelaySeconds: 10
   periodSeconds: 10
