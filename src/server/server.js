@@ -23,7 +23,7 @@ console.log("Llave privada", process.env.SHOPIFY_API_SECRET);
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
-  API_SECRET_KEY: "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",
+  API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
   SCOPES: [
     "read_script_tags",
     "write_script_tags",
