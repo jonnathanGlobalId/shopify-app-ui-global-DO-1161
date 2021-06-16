@@ -7,6 +7,7 @@ import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
 const cors = require("koa-cors");
+import routes from "../routes/index";
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8080;
