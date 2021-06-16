@@ -1,5 +1,7 @@
 import axios from 'axios';
 import {Dispatch} from 'redux';
+import { GLOBAL_ID_API_URL } from '../../../conf';
+import { getAccessToken } from '../../../utils/auth';
 import { GetOrderDispatchTypes } from '../../@types/settingsActionTypes';
 import {
   GET_ORDERS,
@@ -14,20 +16,24 @@ export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => 
       type: GET_ORDERS,
     });
     try {
-      const result = await axios.get(`http:localhost:8080/api/orders/${owner_id}`);
+      const access_token: string = await getAccessToken();
+      const result = await axios.get(`${GLOBAL_ID_API_URL}/order`, {
+        headers: {
+          'Authorization': `Bearer ${access_token}`
+        }
+      });
       const orderGlobal: Order[] = result.data.data;
       const ordersCompleted: Order[] = [];
       orderGlobal.forEach((order: Order) => {
         draftOrders.forEach((draftOrder: DraftOrder) => {
           const idDraftOrder = draftOrder.node.id.split('/')[4];
           if (order.order_id.toString() === idDraftOrder.toString()) {
-            console.log('Ordenenes que son iguales', order.order_id, idDraftOrder);
             const orderComplete = {...order, customer: {...order.customer, purchase_date: draftOrder.node.createdAt}};
             ordersCompleted.push(orderComplete);
           }
         });
       });
-      
+
       dispatch({
         type: GET_ORDERS_SUCCESS,
         payload: orderGlobal
@@ -37,7 +43,6 @@ export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => 
         payload: ordersCompleted
       })
     } catch (error) {
-      console.log('Hubo un problema para obtener las ordenes');
       dispatch({
         type: GET_ORDERS_REJECT
       })

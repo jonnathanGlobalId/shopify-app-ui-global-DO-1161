@@ -58,7 +58,7 @@ health:
     path: '/health/ready'
   startup:
     path: '/health/status'
-  port: 8081
+  port: 8080
   initialDelaySeconds: 10
   periodSeconds: 10
   failureThreshold: 10

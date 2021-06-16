@@ -9,7 +9,7 @@ import Router from "koa-router";
 const cors = require("koa-cors");
 
 dotenv.config();
-const port = parseInt(process.env.PORT, 10) || 8081;
+const port = parseInt(process.env.PORT, 10) || 8080;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev,
@@ -31,9 +31,12 @@ Shopify.Context.initialize({
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
 
+const prefixRoutes = "/v1/shopify-app-ui";
+
 app.prepare().then(async () => {
   const server = new Koa();
   const router = new Router();
+  router.prefix(prefixRoutes);
   server.keys = [Shopify.Context.API_SECRET_KEY];
   server.use(
     createShopifyAuth({
@@ -45,7 +48,7 @@ app.prepare().then(async () => {
         const response = await Shopify.Webhooks.Registry.register({
           shop,
           accessToken,
-          path: "/webhooks",
+          path: `${prefixRoutes}/webhooks`,
           topic: "APP_UNINSTALLED",
           webhookHandler: async (topic, shop, body) =>
             delete ACTIVE_SHOPIFY_SHOPS[shop],
@@ -57,7 +60,7 @@ app.prepare().then(async () => {
           );
         }
 
-        ctx.redirect(`/?shop=${shop}`);
+        ctx.redirect(`${prefixRoutes}/?shop=${shop}`);
       },
     })
   );
@@ -73,7 +76,7 @@ app.prepare().then(async () => {
 
     // This shop hasn't been seen yet, go through OAuth to create a session
     if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
-      ctx.redirect(`/auth?shop=${shop}`);
+      ctx.redirect(`${prefixRoutes}/auth?shop=${shop}`);
     } else {
       await handleRequest(ctx);
     }
@@ -96,17 +99,15 @@ app.prepare().then(async () => {
     }
   );
 
-  router.get("/health/alive", (ctx) => {
+  const okStatus = (ctx) => {
     ctx.status = 200;
-  });
+  };
 
-  router.get("/health/ready", (ctx) => {
-    ctx.status = 200;
-  });
+  router.get("/health/alive", okStatus);
 
-  router.get("/health/status", (ctx) => {
-    ctx.status = 200;
-  });
+  router.get("/health/ready", okStatus);
+
+  router.get("/health/status", okStatus);
 
   router.get("(/_next/static/.*)", handleRequest); // Static content is clear
   router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear

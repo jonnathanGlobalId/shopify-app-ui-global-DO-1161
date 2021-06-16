@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import MainLayout from '../Layout/MainLayout';
 import {ConditionsGlobalId, HeaderTitle, SaveChanges, Loader} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
-import {getUSerInfoAction} from '../redux/actions/user/userActions';
+import {getUserInfoAction} from '../redux/actions/user/userActions';
 import {appState} from '../redux/reducer';
 import {CREATE_SCRIPT_TAG} from '../graphql/Mutations';
 import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS} from '../graphql/Querys';
@@ -40,7 +40,7 @@ const Index = () => {
         different_address_enabled: false,
         order_amount_limit: 0,
       }
-      dispatch(getUSerInfoAction(ownerId, firstData));
+      dispatch(getUserInfoAction(ownerId, firstData));
       dispatch(getOrdersAction(ownerId, draftOrders));
     }
   }, [ownerId, draftOrdersQuery.data]);
