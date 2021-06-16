@@ -16,6 +16,11 @@ const app = next({
 });
 const handle = app.getRequestHandler();
 
+console.log("Nombre del servidor", process.env.HOST.replace(/https:\/\//, ""));
+console.log("Scopes de la aplicación", process.env.SCOPES.split(","));
+console.log("Llave publica", process.env.SHOPIFY_API_KEY);
+console.log("Llave privada", process.env.SHOPIFY_API_SECRET);
+
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
   API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
@@ -31,7 +36,7 @@ Shopify.Context.initialize({
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
 
-const prefixRoutes = "/v1/shopify-app-ui";
+const prefixRoutes = "";
 
 app.prepare().then(async () => {
   const server = new Koa();
