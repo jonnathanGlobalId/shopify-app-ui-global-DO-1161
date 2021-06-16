@@ -20,17 +20,13 @@ const Index = () => {
 
   const dispatch = useDispatch();
   const userState = useSelector((state: appState) => state.user);
-  const [createScripts] = useMutation(CREATE_SCRIPT_TAG, {onCompleted: (data) => console.log(data)});
+  const [createScripts] = useMutation(CREATE_SCRIPT_TAG);
   const resScriptag = useQuery(QUERY_SCRIPTTAGS);
   const resShopId = useQuery(QUERY_SHOPID);
   const draftOrdersQuery = useQuery(QUERY_DRAFT_ORDERS);
 
-  console.log(draftOrdersQuery.data?.draftOrders?.edges)
-  console.log(userState);
-
   useEffect(() => {
     const draftOrders = draftOrdersQuery.data?.draftOrders?.edges;
-    console.log(draftOrders);
     if (ownerId && shopName && shop && draftOrders !== undefined){
       const firstData: OwnerCondition = {
         name: shopName,
@@ -62,7 +58,6 @@ const Index = () => {
 
   useEffect(() => {
     if(resScriptag?.data !== undefined && resScriptag?.data.scriptTags.edges.length <= 0) {
-      console.log('vamos a crear un scripttag')
       createScripts({
         variables: {
           input: {

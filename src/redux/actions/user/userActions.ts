@@ -8,6 +8,7 @@ import {Dispatch} from 'redux';
 import {GetInfoDispatchTypes} from '../../@types/settingsActionTypes';
 import { GLOBAL_ID_API_URL } from '../../../conf';
 import { getAccessToken } from '../../../utils/auth';
+import {url} from '../../../utils/links';
 
 export const getUserInfoAction = (owner_id: string, conditionsData: OwnerCondition) => {
   return async (dispatch: Dispatch<GetInfoDispatchTypes>) => {
@@ -15,8 +16,11 @@ export const getUserInfoAction = (owner_id: string, conditionsData: OwnerConditi
       dispatch({
         type: GET_USER_INFO
       });
+      console.log('Trayendo los datos del usuario');
+      console.log('Desde variables de entorno', url.GLOBAL_ID_API_URL);
       const access_token = await getAccessToken();
-      const result = await axios.get(`${GLOBAL_ID_API_URL}/owner/${owner_id}`, {
+      console.log('Token del usuario', access_token);
+      const result = await axios.get(`${url.GLOBAL_ID_API_URL}/owner/${owner_id}`, {
         headers: {
           'Authorization': `Bearer ${access_token}`
         }

@@ -9,6 +9,7 @@ export async function getAccessToken(): Promise<string> {
       client_secret: APP_CLIENT_SECRET,
       grant_type: 'client_credentials',
     })
+    console.log(bearer);
 
   return <string> bearer.data.access_token
 }
