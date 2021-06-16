@@ -12,6 +12,7 @@ import moment from 'moment';
 import {GET_URL_SHOP} from '../redux/types';
 import {ENCRYPTION_SECRET, GLOBAL_ID_API_URL} from '../conf'
 import { getOrdersAction } from '../redux/actions/orders/getOrdersActions';
+import { getAccessToken } from '../utils/auth';
 
 const Index = () => {
   const [ownerId, setOwnerId] = useState<string>('');
@@ -36,8 +37,16 @@ const Index = () => {
         different_address_enabled: false,
         order_amount_limit: 0,
       }
-      dispatch(getUserInfoAction(ownerId, firstData));
-      dispatch(getOrdersAction(ownerId, draftOrders));
+      // dispatch(getUserInfoAction(ownerId, firstData));
+      // dispatch(getOrdersAction(ownerId, draftOrders));
+      const getToken = async () => {
+        try {
+          const token = await getAccessToken();
+          console.log('token', token);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   }, [ownerId, draftOrdersQuery.data]);
 
@@ -70,14 +79,6 @@ const Index = () => {
       });
     }
   }, [resScriptag?.data]);
-
-  useEffect(() => {
-    if(resScriptag?.data !== undefined && resScriptag?.data.scriptTags.edges.length > 0 && resShopId?.data !== undefined) {
-      const secret = ENCRYPTION_SECRET;
-      const epoch = (moment().unix()).toString();
-      const hmac = createHmac('sha256', `${ownerId}-${secret}`).update(epoch);
-    }
-  }, [resScriptag?.data, resShopId?.data]);
 
 
   return (
