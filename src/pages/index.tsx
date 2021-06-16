@@ -14,6 +14,9 @@ import {ENCRYPTION_SECRET, GLOBAL_ID_API_URL} from '../conf'
 import { getOrdersAction } from '../redux/actions/orders/getOrdersActions';
 import { getAccessToken } from '../utils/auth';
 
+import {useAppBridge} from '@shopify/app-bridge-react';
+import {getSessionToken} from '@shopify/app-bridge-utils';
+
 const Index = () => {
   const [ownerId, setOwnerId] = useState<string>('');
   const [shopName, setShopName] = useState<string>('');
@@ -26,8 +29,19 @@ const Index = () => {
   const resShopId = useQuery(QUERY_SHOPID);
   const draftOrdersQuery = useQuery(QUERY_DRAFT_ORDERS);
 
+  const app = useAppBridge();
+  const getToken = async () => {
+    try {
+      const token = await getSessionToken(app);
+      console.log(token);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     const draftOrders = draftOrdersQuery.data?.draftOrders?.edges;
+    getToken();
     if (ownerId && shopName && shop && draftOrders !== undefined){
       const firstData: OwnerCondition = {
         name: shopName,
@@ -39,14 +53,6 @@ const Index = () => {
       }
       // dispatch(getUserInfoAction(ownerId, firstData));
       // dispatch(getOrdersAction(ownerId, draftOrders));
-      const getToken = async () => {
-        try {
-          const token = await getAccessToken();
-          console.log('token', token);
-        } catch (error) {
-          console.log(error);
-        }
-      }
     }
   }, [ownerId, draftOrdersQuery.data]);
 

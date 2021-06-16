@@ -7,6 +7,10 @@ import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
 const cors = require("koa-cors");
+import routes from "../routes";
+
+const router = new Router();
+const server = new Koa();
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8080;
@@ -20,6 +24,12 @@ console.log("Nombre del servidor", process.env.HOST.replace(/https:\/\//, ""));
 console.log("Scopes de la aplicación", process.env.SCOPES.split(","));
 console.log("Llave publica", process.env.SHOPIFY_API_KEY);
 console.log("Llave privada", process.env.SHOPIFY_API_SECRET);
+
+server.use(routes());
+router.get("/auth-test", (ctx) => {
+  console.log(ctx);
+  ctx.body = "Viendo los auth";
+});
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
@@ -45,8 +55,6 @@ const ACTIVE_SHOPIFY_SHOPS = {};
 const prefixRoutes = "";
 
 app.prepare().then(async () => {
-  const server = new Koa();
-  const router = new Router();
   router.prefix(prefixRoutes);
   server.keys = [Shopify.Context.API_SECRET_KEY];
   server.use(
