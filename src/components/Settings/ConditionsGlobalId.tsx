@@ -42,7 +42,7 @@ const ConditionsGlobalId = () => {
           <h4 className="text-2xl">Require ID verification for orders above $ </h4>
           <input
             onChange={handleChangeLimitAmount}
-            value={userInfo?.order_amount_limit.toString()}
+            value={Number(userInfo?.order_amount_limit).toFixed().toString()}
             className="w-24 border-2 border-blue-500 text-blue-500 text-center py-2 rounded-lg ml-3 font-semibold"
           />
         </div>

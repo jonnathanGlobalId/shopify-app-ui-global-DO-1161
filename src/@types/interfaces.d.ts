@@ -46,6 +46,8 @@ interface OwnerCondition {
   order_amount_limit: Number;
   order_amount_limit_enabled: boolean;
   different_address_enabled: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface ShopInfoData {

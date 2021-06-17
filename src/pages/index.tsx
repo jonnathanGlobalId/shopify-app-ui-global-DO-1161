@@ -7,15 +7,7 @@ import {appState} from '../redux/reducer';
 import {CREATE_SCRIPT_TAG} from '../graphql/Mutations';
 import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS} from '../graphql/Querys';
 import {useQuery, useMutation} from '@apollo/react-hooks';
-import {createHmac} from 'crypto';
-import moment from 'moment';
 import {GET_URL_SHOP} from '../redux/types';
-import {ENCRYPTION_SECRET, GLOBAL_ID_API_URL} from '../conf'
-import { getOrdersAction } from '../redux/actions/orders/getOrdersActions';
-import { getAccessToken } from '../utils/auth';
-
-import {useAppBridge} from '@shopify/app-bridge-react';
-import {getSessionToken} from '@shopify/app-bridge-utils';
 
 const Index = () => {
   const [ownerId, setOwnerId] = useState<string>('');
@@ -29,19 +21,8 @@ const Index = () => {
   const resShopId = useQuery(QUERY_SHOPID);
   const draftOrdersQuery = useQuery(QUERY_DRAFT_ORDERS);
 
-  const app = useAppBridge();
-  const getToken = async () => {
-    try {
-      const token = await getSessionToken(app);
-      console.log(token);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   useEffect(() => {
     const draftOrders = draftOrdersQuery.data?.draftOrders?.edges;
-    getToken();
     if (ownerId && shopName && shop && draftOrders !== undefined){
       const firstData: OwnerCondition = {
         name: shopName,
@@ -51,7 +32,7 @@ const Index = () => {
         different_address_enabled: false,
         order_amount_limit: 0,
       }
-      // dispatch(getUserInfoAction(ownerId, firstData));
+      dispatch(getUserInfoAction(ownerId, firstData));
       // dispatch(getOrdersAction(ownerId, draftOrders));
     }
   }, [ownerId, draftOrdersQuery.data]);

@@ -25,12 +25,6 @@ console.log("Scopes de la aplicación", process.env.SCOPES.split(","));
 console.log("Llave publica", process.env.SHOPIFY_API_KEY);
 console.log("Llave privada", process.env.SHOPIFY_API_SECRET);
 
-server.use(routes());
-router.get("/auth-test", (ctx) => {
-  console.log(ctx);
-  ctx.body = "Viendo los auth";
-});
-
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
   API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
@@ -132,6 +126,7 @@ app.prepare().then(async () => {
   router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
   router.get("(.*)", verifyRequest(), handleRequest); // Everything else must have sessions
 
+  server.use(routes());
   server.use(router.allowedMethods());
   server.use(router.routes());
   server.listen(port, () => {
