@@ -19,7 +19,7 @@ import {
   GET_LOCATION
 } from '../../types';
 
-interface initialState {
+export interface initialState {
   user: null | OwnerCondition;
   shopUrl: string;
   location: string;

@@ -46,7 +46,7 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
         order_id: order_id,
       };
       try {
-        await axios.post('/delete-order', data);
+        // await axios.post('/delete-order', data);
         dispatch(changeStatusOrderAction(Status.REJECTED, order_id));
       } catch (error) {
         dispatch({type: CHANGE_ORDER_STATUS_REJECT})
@@ -67,7 +67,7 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
         order_id: order_id,
       };
       try {
-        await axios.post('/complete-order', data);
+        // await axios.post('/complete-order', data);
         dispatch(changeStatusOrderAction(Status.APPROVED, order_id));
       } catch (error) {
         dispatch({type: CHANGE_ORDER_STATUS_REJECT})

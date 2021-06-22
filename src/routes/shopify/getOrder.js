@@ -1,15 +1,28 @@
 import Router from "koa-router";
 import axios from "axios";
+import { getAccessToken } from "../getToken";
 const koaBody = require("koa-body");
 
 const router = new Router();
 
-router.get("/orders-shopify", async (ctx) => {
-  const { shop, accessToken } = ctx.sesionFromToken;
-  console.log("Buscando el token", accessToken);
-  ctx.body = {
-    mensaje: "Buscando las ordenes",
-  };
+router.get("/get-orders/:owner_id", async (ctx) => {
+  const owner_id = ctx.params.owner_id;
+  try {
+    const url = `${process.env.GLOBAL_ID_API_URL}/order?owner_id=${owner_id}`;
+    const access_token = await getAccessToken();
+    const res = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+    console.log("Resultado de las ordenes", res.data);
+    ctx.body = {
+      mensaje: "Buscando las ordenes",
+    };
+  } catch (error) {
+    console.log(error);
+    ctx.status = 401;
+  }
 });
 
 router.post("/delete-order", koaBody(), async (ctx) => {

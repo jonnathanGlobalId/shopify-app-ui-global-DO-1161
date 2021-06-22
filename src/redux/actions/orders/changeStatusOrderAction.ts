@@ -33,8 +33,8 @@ export const changeStatusOrderAction = (status: Status, order_id: string) => {
       //     'Authorization': `Bearer ${access_token}`
       //   }
       // });
-      const res = await axios.put(`http://localhost:3001/api/order/change-status/${order_id}`, dataSend);
-      console.log('Cambiando el status de la orden', res.data);
+      // const res = await axios.put(`http://localhost:3001/api/order/change-status/${order_id}`, dataSend);
+      // console.log('Cambiando el status de la orden', res.data);
       const array: Order[] = getState().user.orders;
       const arrayPending: Order[] = getState().user.pending_orders;
 

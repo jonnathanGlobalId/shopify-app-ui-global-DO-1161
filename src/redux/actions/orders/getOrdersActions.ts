@@ -22,6 +22,7 @@ export const getOrdersAction = (owner_id: string, orders: OrderShopify[]) => {
       type: GET_ORDERS,
     });
     try {
+      const resultg = await axios.get(`/get-orders/${owner_id}`);
       console.log('Obteniendo las ordenes listas');
       const result = await axios.get(`http://localhost:3001/api/orders/${owner_id}`);
       console.log(result.data);
