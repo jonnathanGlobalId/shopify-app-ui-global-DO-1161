@@ -10,29 +10,36 @@ import {
   GET_PENDING_ORDERS,
 } from '../../types';
 
-export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => {
+enum Status {
+  PENDING = 'PENDING',
+  REJECTED = 'REJECTED',
+  APPROVED = 'APPROVED'
+}
+
+export const getOrdersAction = (owner_id: string, orders: OrderShopify[]) => {
   return async (dispatch: Dispatch<GetOrderDispatchTypes>) => {
     dispatch({
       type: GET_ORDERS,
     });
     try {
-      const access_token: string = await getAccessToken();
-      const result = await axios.get(`${GLOBAL_ID_API_URL}/order`, {
-        headers: {
-          'Authorization': `Bearer ${access_token}`
-        }
-      });
+      console.log('Obteniendo las ordenes listas');
+      const result = await axios.get(`http://localhost:3001/api/orders/${owner_id}`);
+      console.log(result.data);
       const orderGlobal: Order[] = result.data.data;
       const ordersCompleted: Order[] = [];
+
       orderGlobal.forEach((order: Order) => {
-        draftOrders.forEach((draftOrder: DraftOrder) => {
-          const idDraftOrder = draftOrder.node.id.split('/')[4];
-          if (order.order_id.toString() === idDraftOrder.toString()) {
-            const orderComplete = {...order, customer: {...order.customer, purchase_date: draftOrder.node.createdAt}};
+        orders.forEach((orderShopify: OrderShopify) => {
+          const orderShopifyId = orderShopify.node.id.split('/')[4];
+          if (order.order_id.toString() === orderShopifyId.toString() && order.status === Status.PENDING) {
+            const orderComplete = {...order, customer: {...order.customer, purchase_date: orderShopify.node.createdAt}};
             ordersCompleted.push(orderComplete);
           }
         });
       });
+
+      console.log('Ordenes completas', orderGlobal);
+      console.log('Ordenes Pendientes', ordersCompleted);
 
       dispatch({
         type: GET_ORDERS_SUCCESS,

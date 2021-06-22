@@ -22,9 +22,9 @@ router.post("/auth-token", async (ctx) => {
 
 router.get("/get-owner-settings/:owner_id", async (ctx) => {
   const owner_id = ctx.params.owner_id;
-  console.log("Obteniendo el id del owner", owner_id);
   try {
     const access_token = await getAccessToken();
+    console.log("Obteniendo el id del owner", owner_id, access_token);
     const result = await axios.get(
       `${process.env.GLOBAL_ID_API_URL}/owner/${owner_id}`,
       {
@@ -38,6 +38,7 @@ router.get("/get-owner-settings/:owner_id", async (ctx) => {
       data: result.data,
     };
   } catch (error) {
+    console.log(error);
     ctx.status = 401;
     ctx.body = "have a problem to get user";
   }
@@ -62,6 +63,7 @@ router.put("/save-settings", koaBody(), async (ctx) => {
       mensaje: "Las configuraciones del usuario cambiaron exitosamente",
     };
   } catch (error) {
+    console.log(error);
     ctx.status = 401;
     ctx.body = "have a problem to change configurations";
   }
@@ -85,7 +87,7 @@ router.put("/create-user", koaBody(), async (ctx) => {
     };
   } catch (error) {
     ctx.status = 401;
-    ctx.body = "have a problem to change configurations";
+    ctx.body = "have a problem to creat user";
   }
 });
 

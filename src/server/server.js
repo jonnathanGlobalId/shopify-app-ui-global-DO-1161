@@ -7,6 +7,8 @@ import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
 const cors = require("koa-cors");
+import fs from "fs";
+import { Session } from "@shopify/shopify-api/dist/auth/session";
 import routes from "../routes";
 
 const router = new Router();
@@ -20,10 +22,27 @@ const app = next({
 });
 const handle = app.getRequestHandler();
 
-console.log("Nombre del servidor", process.env.HOST.replace(/https:\/\//, ""));
-console.log("Scopes de la aplicación", process.env.SCOPES.split(","));
-console.log("Llave publica", process.env.SHOPIFY_API_KEY);
-console.log("Llave privada", process.env.SHOPIFY_API_SECRET);
+const fileName = "./session.json";
+const storeCallback = (session) => {
+  console.log("Cargando la sesion");
+  fs.writeFileSync(fileName, JSON.stringify(session));
+  return true;
+};
+const loadCallback = (id) => {
+  if (fs.existsSync(fileName)) {
+    const sesionResult = fs.readFileSync(fileName, "utf8");
+    return Object.assign(new Session(), JSON.parse(sesionResult));
+  }
+  return false;
+};
+const deleteCallback = (id) => {
+  console.log("delete callback", id);
+};
+const sessionStorage = new Shopify.Session.CustomSessionStorage(
+  storeCallback,
+  loadCallback,
+  deleteCallback
+);
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
@@ -34,17 +53,24 @@ Shopify.Context.initialize({
     "read_orders",
     "read_draft_orders",
     "write_draft_orders",
+    "write_orders",
+    "read_inventory",
   ],
   HOST_NAME: process.env.HOST.replace(/https:\/\//, ""),
   API_VERSION: ApiVersion.October20,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
-  SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
+  SESSION_STORAGE: sessionStorage,
 });
 
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
+const session = loadCallback();
+
+if (session?.shop && session?.scope) {
+  ACTIVE_SHOPIFY_SHOPS[session.shop] = session.scope;
+}
 
 const prefixRoutes = "";
 
@@ -126,6 +152,14 @@ app.prepare().then(async () => {
   router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
   router.get("(.*)", verifyRequest(), handleRequest); // Everything else must have sessions
 
+  const injectSession = async (ctx, next) => {
+    // const currentSession = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
+    // console.log('Desde middleware', loadCallback());
+    ctx.sesionFromToken = loadCallback();
+    return next();
+  };
+
+  server.use(injectSession);
   server.use(routes());
   server.use(router.allowedMethods());
   server.use(router.routes());

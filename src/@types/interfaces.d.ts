@@ -17,7 +17,17 @@ interface Customer {
 
 interface DraftOrder {
   node: {
+    displayFulfillmentStatus?: string;
     completedAt: string;
+    createdAt: string;
+    email?: string;
+    id: string;
+    name: string;
+  }
+}
+interface OrderShopify {
+  node: {
+    displayFulfillmentStatus?: string;
     createdAt: string;
     email?: string;
     id: string;

@@ -13,7 +13,8 @@ const ConditionsGlobalId = () => {
   const userInfo: OwnerCondition = user.user;
 
   const handleChangeconditions = (dataChange: OwnerCondition) => {
-    console.log(dataChange);
+    dataChange.order_amount_limit = Number(dataChange.order_amount_limit);
+    console.log('Configuraciones del switch', dataChange);
     dispatch({type: 'CHANGE_CONDITIONS', payload: dataChange});
   };
 
