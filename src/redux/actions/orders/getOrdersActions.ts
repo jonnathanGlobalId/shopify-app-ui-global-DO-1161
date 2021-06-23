@@ -1,7 +1,5 @@
 import axios from 'axios';
 import {Dispatch} from 'redux';
-import { GLOBAL_ID_API_URL } from '../../../conf';
-import { getAccessToken } from '../../../utils/auth';
 import { GetOrderDispatchTypes } from '../../@types/settingsActionTypes';
 import {
   GET_ORDERS,
@@ -16,40 +14,39 @@ enum Status {
   APPROVED = 'APPROVED'
 }
 
-export const getOrdersAction = (owner_id: string, orders: OrderShopify[]) => {
+export const getOrdersAction = (shopName: string, orders: OrderShopify[]) => {
   return async (dispatch: Dispatch<GetOrderDispatchTypes>) => {
     dispatch({
       type: GET_ORDERS,
     });
+    console.log('Buscando las ordedes');
     try {
-      const resultg = await axios.get(`/get-orders/${owner_id}`);
-      console.log('Obteniendo las ordenes listas');
-      const result = await axios.get(`http://localhost:3001/api/orders/${owner_id}`);
-      console.log(result.data);
-      const orderGlobal: Order[] = result.data.data;
-      const ordersCompleted: Order[] = [];
+      const shop = shopName.split('.')[0];
+      const result = await axios.get(`/get-orders/${shop}`);
+      // const result = await axios.get(`http://localhost:3001/api/orders/${owner_id}`);
 
-      orderGlobal.forEach((order: Order) => {
-        orders.forEach((orderShopify: OrderShopify) => {
-          const orderShopifyId = orderShopify.node.id.split('/')[4];
-          if (order.order_id.toString() === orderShopifyId.toString() && order.status === Status.PENDING) {
-            const orderComplete = {...order, customer: {...order.customer, purchase_date: orderShopify.node.createdAt}};
-            ordersCompleted.push(orderComplete);
-          }
-        });
-      });
+      console.log('Datos de la api global id', result.data);
+      // const orderGlobal: Order[] = result.data.data;
+      // const ordersCompleted: Order[] = [];
 
-      console.log('Ordenes completas', orderGlobal);
-      console.log('Ordenes Pendientes', ordersCompleted);
+      // orderGlobal.forEach((order: Order) => {
+      //   orders.forEach((orderShopify: OrderShopify) => {
+      //     const orderShopifyId = orderShopify.node.id.split('/')[4];
+      //     if (order.order_id.toString() === orderShopifyId.toString() && order.status === Status.PENDING) {
+      //       const orderComplete = {...order, customer: {...order.customer, purchase_date: orderShopify.node.createdAt}};
+      //       ordersCompleted.push(orderComplete);
+      //     }
+      //   });
+      // });
 
-      dispatch({
-        type: GET_ORDERS_SUCCESS,
-        payload: orderGlobal
-      });
-      dispatch({
-        type: GET_PENDING_ORDERS,
-        payload: ordersCompleted
-      })
+      // dispatch({
+      //   type: GET_ORDERS_SUCCESS,
+      //   payload: orderGlobal
+      // });
+      // dispatch({
+      //   type: GET_PENDING_ORDERS,
+      //   payload: ordersCompleted
+      // });
     } catch (error) {
       dispatch({
         type: GET_ORDERS_REJECT

@@ -15,7 +15,6 @@ export const getUserInfoAction = (owner_id: string, conditionsData: OwnerConditi
       });
       console.log('Trayendo los datos del usuario');
       const result = await axios.get(`/get-owner-settings/${owner_id}`);
-      console.log(result.data);
       const data = {
         owner_id : result.data.data.owner_id,
         name : result.data.data.name,
@@ -24,7 +23,7 @@ export const getUserInfoAction = (owner_id: string, conditionsData: OwnerConditi
         order_amount_limit_enabled : result.data.data.order_amount_limit_enabled,
         different_address_enabled : result.data.data.different_address_enabled,
       }
-      console.log(data);
+      console.log('Data global id api of user settings', result.data);
       dispatch({
         type: GET_USER_INFO_SUCCESS,
         payload: data

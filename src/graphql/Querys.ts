@@ -46,6 +46,7 @@ const QUERY_ORDERS = gql `
     orders(first: 250, query: "UNFULFILLED") {
       edges {
         node {
+          cancelledAt
           displayFulfillmentStatus
           email
           name

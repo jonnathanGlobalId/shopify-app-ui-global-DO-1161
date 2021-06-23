@@ -6,9 +6,10 @@ import {getUserInfoAction} from '../redux/actions/user/userActions';
 import {getOrdersAction} from '../redux/actions/orders/getOrdersActions';
 import {appState} from '../redux/reducer';
 import {CREATE_SCRIPT_TAG} from '../graphql/Mutations';
-import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS, QUERY_ORDERS, QUERY_LOCATION} from '../graphql/Querys';
+import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_ORDERS, QUERY_LOCATION} from '../graphql/Querys';
 import {useQuery, useMutation} from '@apollo/react-hooks';
 import {GET_LOCATION, GET_URL_SHOP} from '../redux/types';
+import { initialState } from '../redux/reducer/user/userReducer';
 
 const Index = () => {
   const [ownerId, setOwnerId] = useState<string>('');
@@ -16,18 +17,17 @@ const Index = () => {
   const [shop, setShop] = useState<string>('');
 
   const dispatch = useDispatch();
-  const userState = useSelector((state: appState) => state.user);
+  const userState: initialState = useSelector((state: appState) => state.user);
   const [createScripts] = useMutation(CREATE_SCRIPT_TAG);
   const resScriptag = useQuery(QUERY_SCRIPTTAGS);
   const resShopId = useQuery(QUERY_SHOPID);
   const orders = useQuery(QUERY_ORDERS);
-  const draftOrdersQuery = useQuery(QUERY_DRAFT_ORDERS);
   const locationQuery = useQuery(QUERY_LOCATION);
 
   useEffect(() => {
-    const ordersData: OrderShopify[] = orders.data?.orders?.edges
-    const draftOrders = draftOrdersQuery.data?.draftOrders?.edges;
-    if (ownerId && shopName && shop && draftOrders !== undefined){
+    const orderQuery: OrderShopify[] = orders.data?.orders?.edges;
+    if (ownerId && shopName && shop && orderQuery !== undefined){
+      const ordersData = orderQuery.filter((order: OrderShopify) => order.node.cancelledAt === null);
       const firstData: OwnerCondition = {
         name: shopName,
         owner_id: ownerId,
@@ -36,16 +36,18 @@ const Index = () => {
         different_address_enabled: false,
         order_amount_limit: 0,
       }
+      // console.log('shop', shop);
+      // console.log('shopName', shopName);
       dispatch(getUserInfoAction(ownerId, firstData));
-      dispatch(getOrdersAction(ownerId, ordersData));
+      dispatch(getOrdersAction(shop, ordersData));
     }
-  }, [ownerId, draftOrdersQuery.data, orders.data]);
+  }, [ownerId, orders.data]);
 
   useEffect(() => {
     if (locationQuery.data !== undefined) {
       const location: string = locationQuery.data?.locations?.edges[0]?.node?.id;
       const locationId = location.split('/')[4];
-      console.log('Ubicación del usuario', location.split('/')[4]);
+      // console.log('Ubicación del usuario', location.split('/')[4]);
       dispatch({
         type: GET_LOCATION,
         payload: locationId,
@@ -86,7 +88,7 @@ const Index = () => {
 
   return (
     <>
-      <Loader show={draftOrdersQuery.loading} />
+      <Loader show={userState.loading} />
       <MainLayout>
         <HeaderTitle title="Settings" subtitle="Reduce risk and eliminate fraud with free customer ID verification" />
         <div>

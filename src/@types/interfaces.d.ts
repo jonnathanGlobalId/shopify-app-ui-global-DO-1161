@@ -27,6 +27,7 @@ interface DraftOrder {
 }
 interface OrderShopify {
   node: {
+    cancelledAt?: string;
     displayFulfillmentStatus?: string;
     createdAt: string;
     email?: string;

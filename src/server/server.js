@@ -6,10 +6,20 @@ import Shopify, { ApiVersion } from "@shopify/shopify-api";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
-const cors = require("koa-cors");
-import fs from "fs";
 import { Session } from "@shopify/shopify-api/dist/auth/session";
 import routes from "../routes";
+import { promisify } from "util";
+import redis from "redis";
+
+/*----Informacion de redis para el auth-----*/
+const client = redis.createClient();
+const getAsync = promisify(client.get).bind(client);
+const setAsync = promisify(client.set).bind(client);
+const delAsync = promisify(client.del).bind(client);
+client.on("error", function (error) {
+  console.error(error);
+});
+/*----Informacion de redis para el auth-----*/
 
 const router = new Router();
 const server = new Koa();
@@ -22,27 +32,43 @@ const app = next({
 });
 const handle = app.getRequestHandler();
 
-const fileName = "./session.json";
-const storeCallback = (session) => {
-  console.log("Cargando la sesion");
-  fs.writeFileSync(fileName, JSON.stringify(session));
-  return true;
-};
-const loadCallback = (id) => {
-  if (fs.existsSync(fileName)) {
-    const sesionResult = fs.readFileSync(fileName, "utf8");
-    return Object.assign(new Session(), JSON.parse(sesionResult));
+let sessionVar;
+
+const storeCallback = async (session) => {
+  if (!session) return;
+  try {
+    const res = await setAsync(session.id, JSON.stringify(session));
+    return true;
+  } catch (error) {
+    throw new Error(error);
   }
-  return false;
 };
-const deleteCallback = (id) => {
+const loadCallback = async (id) => {
+  if (id === undefined) return;
+  try {
+    const reply = await getAsync(id);
+    if (reply) {
+      sessionVar = JSON.parse(reply);
+      return Object.assign(new Session(), JSON.parse(reply));
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+const deleteCallback = async (id) => {
   console.log("delete callback", id);
+  try {
+    const res = await delAsync(id);
+    console.log("Eliminando usuario callback", res);
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
 };
-const sessionStorage = new Shopify.Session.CustomSessionStorage(
-  storeCallback,
-  loadCallback,
-  deleteCallback
-);
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
@@ -60,7 +86,12 @@ Shopify.Context.initialize({
   API_VERSION: ApiVersion.October20,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
-  SESSION_STORAGE: sessionStorage,
+  SESSION_STORAGE: new Shopify.Session.CustomSessionStorage(
+    storeCallback,
+    loadCallback,
+    deleteCallback
+  ),
+  // SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
 });
 
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
@@ -153,10 +184,20 @@ app.prepare().then(async () => {
   router.get("(.*)", verifyRequest(), handleRequest); // Everything else must have sessions
 
   const injectSession = async (ctx, next) => {
-    // const currentSession = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
-    // console.log('Desde middleware', loadCallback());
-    ctx.sesionFromToken = loadCallback();
-    return next();
+    try {
+      // const currentSession = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res);
+      let sessionData;
+      if (sessionVar !== undefined) {
+        sessionData = {
+          shop: sessionVar?.shop,
+          accessToken: sessionVar?.accessToken,
+        };
+        ctx.sesionFromToken = sessionData;
+      }
+      return next();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   server.use(injectSession);
