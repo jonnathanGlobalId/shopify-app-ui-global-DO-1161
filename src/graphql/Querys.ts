@@ -41,4 +41,33 @@ const QUERY_DRAFT_ORDERS = gql`
   }
 `;
 
-export {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS};
+const QUERY_ORDERS = gql `
+  query {
+    orders(first: 250, query: "UNFULFILLED") {
+      edges {
+        node {
+          cancelledAt
+          displayFulfillmentStatus
+          email
+          name
+          id
+          createdAt
+        }
+      }
+    }
+  }
+`;
+
+const QUERY_LOCATION = gql`
+  query {
+    locations(first: 5) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS, QUERY_ORDERS, QUERY_LOCATION};

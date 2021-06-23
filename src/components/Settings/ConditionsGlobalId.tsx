@@ -13,7 +13,8 @@ const ConditionsGlobalId = () => {
   const userInfo: OwnerCondition = user.user;
 
   const handleChangeconditions = (dataChange: OwnerCondition) => {
-    console.log(dataChange);
+    dataChange.order_amount_limit = Number(dataChange.order_amount_limit);
+    console.log('Configuraciones del switch', dataChange);
     dispatch({type: 'CHANGE_CONDITIONS', payload: dataChange});
   };
 
@@ -42,7 +43,7 @@ const ConditionsGlobalId = () => {
           <h4 className="text-2xl">Require ID verification for orders above $ </h4>
           <input
             onChange={handleChangeLimitAmount}
-            value={userInfo?.order_amount_limit.toString()}
+            value={userInfo?.order_amount_limit ? Number(userInfo?.order_amount_limit).toFixed().toString() : '0'}
             className="w-24 border-2 border-blue-500 text-blue-500 text-center py-2 rounded-lg ml-3 font-semibold"
           />
         </div>

@@ -17,7 +17,18 @@ interface Customer {
 
 interface DraftOrder {
   node: {
+    displayFulfillmentStatus?: string;
     completedAt: string;
+    createdAt: string;
+    email?: string;
+    id: string;
+    name: string;
+  }
+}
+interface OrderShopify {
+  node: {
+    cancelledAt?: string;
+    displayFulfillmentStatus?: string;
     createdAt: string;
     email?: string;
     id: string;
@@ -46,6 +57,8 @@ interface OwnerCondition {
   order_amount_limit: Number;
   order_amount_limit_enabled: boolean;
   different_address_enabled: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface ShopInfoData {
