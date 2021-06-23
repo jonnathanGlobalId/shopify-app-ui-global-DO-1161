@@ -38,29 +38,38 @@ router.post("/delete-order", koaBody(), async (ctx) => {
 
   try {
     /* Shopify Request to delete Order */
-    // const url = `https://${shop}/admin/api/2021-04/orders/${data?.order_id}/cancel.json`;
-    // const res = await axios.post(url, {}, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "X-Shopify-Access-Token": accessToken,
-    //   },
-    // });
+    const url = `https://${shop}/admin/api/2021-04/orders/${data?.order_id}/cancel.json`;
+    const res = await axios.post(
+      url,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Access-Token": accessToken,
+        },
+      }
+    );
     /* Shopify Request to delete Order */
 
     /* Global id Request to change status Order */
-    // const access_token = await getAccessToken();
-    // await axios.put(`${process.env.GLOBAL_ID_API_URL}/order/${order_id}`, dataSend, {
-    //   headers: {
-    //     'Authorization': `Bearer ${access_token}`
-    //   }
-    // });
+    const access_token = await getAccessToken();
+    await axios.put(
+      `${process.env.GLOBAL_ID_API_URL}/order/${order_id}`,
+      dataSend,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
     /* Global id Request to change status Order */
 
     /* Result of request */
     ctx.body = {
       mensaje: "La orden ha sido cancelada exitosamente",
-      // data: res.data,
+      data: res.data,
     };
+
     /* Result of request */
   } catch (error) {
     console.log(error);
@@ -78,27 +87,31 @@ router.post("/complete-order", koaBody(), async (ctx) => {
 
   try {
     /* Global id Request to change status Order */
-    // const url = `https://${shop}/admin/api/2021-04/orders/${data?.order_id}/fulfillments.json`;
-    // const dataSend = {
-    //   fulfillment: {
-    //     location_id: `${data?.location}`,
-    //   },
-    // };
-    // await axios.post(url, dataSend, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "X-Shopify-Access-Token": accessToken,
-    //   },
-    // });
+    const url = `https://${shop}/admin/api/2021-04/orders/${data?.order_id}/fulfillments.json`;
+    const dataSend = {
+      fulfillment: {
+        location_id: `${data?.location}`,
+      },
+    };
+    await axios.post(url, dataSend, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": accessToken,
+      },
+    });
     /* Global id Request to change status Order */
 
     /* Global id Request to change status Order */
-    // const access_token = await getAccessToken();
-    // await axios.put(`${process.env.GLOBAL_ID_API_URL}/order/${order_id}`, data, {
-    //   headers: {
-    //     'Authorization': `Bearer ${access_token}`
-    //   }
-    // });
+    const access_token = await getAccessToken();
+    await axios.put(
+      `${process.env.GLOBAL_ID_API_URL}/order/${order_id}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
     /* Global id Request to change status Order */
 
     /* Result of request */

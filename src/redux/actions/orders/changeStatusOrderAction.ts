@@ -49,23 +49,23 @@ export const changeStatusOrderAction = (status: Status, order_id: string) => {
       // console.log('Cambiando el status de la orden', res.data);
 
       // Change status order and create orders pending;
-      // const array: Order[] = getState().user.orders;
-      // const arrayPending: Order[] = getState().user.pending_orders;
+      const array: Order[] = getState().user.orders;
+      const arrayPending: Order[] = getState().user.pending_orders;
 
-      // const index = array.findIndex((order: Order) => order.order_id === order_id);
-      // const indexPending = arrayPending.findIndex((order: Order) => order.order_id === order_id);
+      const index = array.findIndex((order: Order) => order.order_id === order_id);
+      const indexPending = arrayPending.findIndex((order: Order) => order.order_id === order_id);
 
-      // array[index] = {...array[index], status: status, customer: {...array[index].customer, purchase_date: moment().toISOString()}}
-      // arrayPending[indexPending] = {...arrayPending[indexPending], status: status, customer: {...array[indexPending].customer, purchase_date: moment().toISOString()}}
-      // const newDataPending = arrayPending.filter((order: Order) => order.status === 'PENDING' );
+      array[index] = {...array[index], status: status, customer: {...array[index].customer, purchase_date: moment().toISOString()}}
+      arrayPending[indexPending] = {...arrayPending[indexPending], status: status, customer: {...array[indexPending].customer, purchase_date: moment().toISOString()}}
+      const newDataPending = arrayPending.filter((order: Order) => order.status === 'PENDING' );
 
-      // dispatch({
-      //   type: CHANGE_ORDER_STATUS_SUCCESS,
-      //   payload: {
-      //     orders: array,
-      //     pending_orders: newDataPending,
-      //   },
-      // })
+      dispatch({
+        type: CHANGE_ORDER_STATUS_SUCCESS,
+        payload: {
+          orders: array,
+          pending_orders: newDataPending,
+        },
+      })
 
     } catch (error) {
       console.log(error);

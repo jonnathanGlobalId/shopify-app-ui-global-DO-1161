@@ -26,27 +26,27 @@ export const getOrdersAction = (shopName: string, orders: OrderShopify[]) => {
       // const result = await axios.get(`http://localhost:3001/api/orders/${owner_id}`);
 
       console.log('Datos de la api global id', result.data);
-      // const orderGlobal: Order[] = result.data.data;
-      // const ordersCompleted: Order[] = [];
+      const orderGlobal: Order[] = result.data.data;
+      const ordersCompleted: Order[] = [];
 
-      // orderGlobal.forEach((order: Order) => {
-      //   orders.forEach((orderShopify: OrderShopify) => {
-      //     const orderShopifyId = orderShopify.node.id.split('/')[4];
-      //     if (order.order_id.toString() === orderShopifyId.toString() && order.status === Status.PENDING) {
-      //       const orderComplete = {...order, customer: {...order.customer, purchase_date: orderShopify.node.createdAt}};
-      //       ordersCompleted.push(orderComplete);
-      //     }
-      //   });
-      // });
+      orderGlobal.forEach((order: Order) => {
+        orders.forEach((orderShopify: OrderShopify) => {
+          const orderShopifyId = orderShopify.node.id.split('/')[4];
+          if (order.order_id.toString() === orderShopifyId.toString() && order.status === Status.PENDING) {
+            const orderComplete = {...order, customer: {...order.customer, purchase_date: orderShopify.node.createdAt}};
+            ordersCompleted.push(orderComplete);
+          }
+        });
+      });
 
-      // dispatch({
-      //   type: GET_ORDERS_SUCCESS,
-      //   payload: orderGlobal
-      // });
-      // dispatch({
-      //   type: GET_PENDING_ORDERS,
-      //   payload: ordersCompleted
-      // });
+      dispatch({
+        type: GET_ORDERS_SUCCESS,
+        payload: orderGlobal
+      });
+      dispatch({
+        type: GET_PENDING_ORDERS,
+        payload: ordersCompleted
+      });
     } catch (error) {
       dispatch({
         type: GET_ORDERS_REJECT
