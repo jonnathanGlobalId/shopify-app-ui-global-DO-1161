@@ -12,13 +12,13 @@ import { promisify } from "util";
 import redis from "redis";
 
 /*----Informacion de redis para el auth-----*/
-const client = redis.createClient();
-const getAsync = promisify(client.get).bind(client);
-const setAsync = promisify(client.set).bind(client);
-const delAsync = promisify(client.del).bind(client);
-client.on("error", function (error) {
-  console.error(error);
-});
+// const client = redis.createClient();
+// const getAsync = promisify(client.get).bind(client);
+// const setAsync = promisify(client.set).bind(client);
+// const delAsync = promisify(client.del).bind(client);
+// client.on("error", function (error) {
+//   console.error(error);
+// });
 /*----Informacion de redis para el auth-----*/
 
 const router = new Router();
@@ -34,41 +34,41 @@ const handle = app.getRequestHandler();
 
 let sessionVar;
 
-const storeCallback = async (session) => {
-  if (!session) return;
-  try {
-    const res = await setAsync(session.id, JSON.stringify(session));
-    return true;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-const loadCallback = async (id) => {
-  if (id === undefined) return;
-  try {
-    const reply = await getAsync(id);
-    if (reply) {
-      sessionVar = JSON.parse(reply);
-      return Object.assign(new Session(), JSON.parse(reply));
-    } else {
-      return false;
-    }
-  } catch (error) {
-    console.log(error);
-    throw new Error(error);
-  }
-};
-const deleteCallback = async (id) => {
-  console.log("delete callback", id);
-  try {
-    const res = await delAsync(id);
-    console.log("Eliminando usuario callback", res);
-    return res;
-  } catch (error) {
-    console.log(error);
-    throw new Error(error);
-  }
-};
+// const storeCallback = async (session) => {
+//   if (!session) return;
+//   try {
+//     const res = await setAsync(session.id, JSON.stringify(session));
+//     return true;
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
+// const loadCallback = async (id) => {
+//   if (id === undefined) return;
+//   try {
+//     const reply = await getAsync(id);
+//     if (reply) {
+//       sessionVar = JSON.parse(reply);
+//       return Object.assign(new Session(), JSON.parse(reply));
+//     } else {
+//       return false;
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     throw new Error(error);
+//   }
+// };
+// const deleteCallback = async (id) => {
+//   console.log("delete callback", id);
+//   try {
+//     const res = await delAsync(id);
+//     console.log("Eliminando usuario callback", res);
+//     return res;
+//   } catch (error) {
+//     console.log(error);
+//     throw new Error(error);
+//   }
+// };
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
@@ -86,22 +86,22 @@ Shopify.Context.initialize({
   API_VERSION: ApiVersion.October20,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
-  SESSION_STORAGE: new Shopify.Session.CustomSessionStorage(
-    storeCallback,
-    loadCallback,
-    deleteCallback
-  ),
-  // SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
+  // SESSION_STORAGE: new Shopify.Session.CustomSessionStorage(
+  //   storeCallback,
+  //   loadCallback,
+  //   deleteCallback
+  // ),
+  SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
 });
 
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
 // persist this object in your app.
 const ACTIVE_SHOPIFY_SHOPS = {};
-const session = loadCallback();
+// const session = loadCallback();
 
-if (session?.shop && session?.scope) {
-  ACTIVE_SHOPIFY_SHOPS[session.shop] = session.scope;
-}
+// if (session?.shop && session?.scope) {
+//   ACTIVE_SHOPIFY_SHOPS[session.shop] = session.scope;
+// }
 
 const prefixRoutes = "";
 
@@ -114,7 +114,7 @@ app.prepare().then(async () => {
         // Access token and shop available in ctx.state.shopify
         const { shop, accessToken, scope } = ctx.state.shopify;
         ACTIVE_SHOPIFY_SHOPS[shop] = scope;
-
+        sessionVar = ctx.state.shopify;
         const response = await Shopify.Webhooks.Registry.register({
           shop,
           accessToken,
