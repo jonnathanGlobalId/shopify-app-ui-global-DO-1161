@@ -1,7 +1,8 @@
 const { parsed: localEnv } = require("dotenv").config();
 
 const webpack = require("webpack");
-const apiKey = JSON.stringify(process.env.SHOPIFY_API_KEY);
+console.log("Configuraciones next", process.env.SHOPIFY_API_KEY);
+const apiKey = JSON.stringify("4ba5dbb7ed2ea5b468762c7bf776c798");
 
 module.exports = {
   webpack: (config) => {
