@@ -200,6 +200,7 @@ app.prepare().then(async () => {
           shop: sessionVar?.shop,
           accessToken: sessionVar?.accessToken,
         };
+        console.log("Information about acces token and shop", sessionData);
         ctx.sesionFromToken = sessionData;
       }
       return next();

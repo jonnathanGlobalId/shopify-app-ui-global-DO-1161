@@ -76,7 +76,7 @@ const Index = () => {
         variables: {
           input: {
             //src: `${GLOBAL_ID_API_URL}/script-tag`,
-            src: 'https://shopify-fake-api.herokuapp.com/script',
+            src: 'https://apps.globalid.dev/v1/shopify-plugin/script-tag',
             displayScope: "ALL",
           },
         },
