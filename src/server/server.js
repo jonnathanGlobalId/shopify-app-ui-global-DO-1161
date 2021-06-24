@@ -12,13 +12,13 @@ import { promisify } from "util";
 import redis from "redis";
 
 /*----Informacion de redis para el auth-----*/
-const client = redis.createClient();
-const getAsync = promisify(client.get).bind(client);
-const setAsync = promisify(client.set).bind(client);
-const delAsync = promisify(client.del).bind(client);
-client.on("error", function (error) {
-  console.error(error);
-});
+// const client = redis.createClient();
+// const getAsync = promisify(client.get).bind(client);
+// const setAsync = promisify(client.set).bind(client);
+// const delAsync = promisify(client.del).bind(client);
+// client.on("error", function (error) {
+//   console.error(error);
+// });
 /*----Informacion de redis para el auth-----*/
 
 const router = new Router();
@@ -92,12 +92,12 @@ Shopify.Context.initialize({
   API_VERSION: ApiVersion.October20,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
-  SESSION_STORAGE: new Shopify.Session.CustomSessionStorage(
-    storeCallback,
-    loadCallback,
-    deleteCallback
-  ),
-  // SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
+  // SESSION_STORAGE: new Shopify.Session.CustomSessionStorage(
+  //   storeCallback,
+  //   loadCallback,
+  //   deleteCallback
+  // ),
+  SESSION_STORAGE: new Shopify.Session.MemorySessionStorage(),
 });
 
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should
