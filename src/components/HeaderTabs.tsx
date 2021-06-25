@@ -10,7 +10,7 @@ const HeaderTabs = () => {
   const Home = pathname === '/';
   const Approvals = pathname === '/approvals';
   const History = pathname === '/history';
-  const Script = pathname === '/script-page';
+  // const Script = pathname === '/script-page';
 
   return (
     <div className="h-24">
@@ -37,13 +37,13 @@ const HeaderTabs = () => {
             </p>
           </Link>
         </li>
-        <li className={`h-full flex w-1/3 ${Script ? 'text-blue-600' : 'text-black'}`}>
+        {/* <li className={`h-full flex w-1/3 ${Script ? 'text-blue-600' : 'text-black'}`}>
           <Link href="/script-page">
             <p  className="h-full justify-center cursor-pointer items-center w-full flex font-medium text-2xl">
               History
             </p>
           </Link>
-        </li>
+        </li> */}
       </ul>
     </div>
   )
