@@ -78,7 +78,8 @@ const Index = () => {
           input: {
             //src: `${GLOBAL_ID_API_URL}/script-tag`,
             // src: 'https://shopify-fake-api.herokuapp.com/script',
-            src: 'https://shopify-fake-api.herokuapp.com/script',
+            // src: 'https://shopify-fake-api.herokuapp.com/script',
+            src: 'https://script.loca.lt/script',
             displayScope: "ALL",
           },
         },

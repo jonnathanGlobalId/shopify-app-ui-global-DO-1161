@@ -24,34 +24,38 @@ router.post("/auth-token", async (ctx) => {
 
 router.get("/configuration", async (ctx) => {
   const { shop } = ctx.query;
-  console.log("Obteniendo la información de las configuraciones");
   const timestamp = moment().unix().toString();
 
   const secret = process.env.ENCRYPTION_SECRET;
+  const url = process.env.GLOBAL_ID_API_URL;
   const hmac = createHmac("sha256", `${shop}-${secret}`)
     .update(timestamp)
-    .digest("hex");
-  console.log("secreto", secret);
-  console.log("Data shop", shop);
-  console.log("Data timestamp", timestamp);
-  console.log("Data hmac", hmac);
-  console.log(
-    "url",
-    `${process.env.GLOBAL_ID_API_URL}/condition?shop=${shop}&hmac=${hmac}&timestamp=${timestamp}`
-  );
+    .digest("base64");
 
   console.log("Haciendo la peticion a las configuraciones");
   try {
+    const access_token = await getAccessToken();
+
+    // console.log("secreto", secret);
+    // console.log("Data shop", shop);
+    // console.log("Data timestamp", timestamp);
+    // console.log("Data hmac", hmac);
+    // console.log('token usuario', access_token);
+    // console.log("url", `${url}/condition?shop=${shop}&hmac=${hmac}&timestamp=${timestamp}`);
     const data = await axios.get(
-      `${
-        process.env.GLOBAL_ID_API_URL / condition
-      }?shop=${shop}&hmac=${hmac}&timestamp=${timestamp}`
+      `${url}/condition?shop=${shop}&hmac=${hmac}&timestamp=${timestamp}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
     );
-    console.log("Informacion del url", data.data);
     ctx.body = {
-      mensaje: "buscando configuraciones",
+      mensaje: "get owner settings",
+      settings: data.data,
     };
   } catch (error) {
+    ctx.status = 401;
     ctx.body = {
       mensaje: "Problema para buscar configuraciones",
     };
