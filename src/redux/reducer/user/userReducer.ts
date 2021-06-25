@@ -80,6 +80,7 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
     return {
       ...state,
       user: action.payload,
+      loading: false,
       isChanged: false,
     };
 

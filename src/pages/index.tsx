@@ -72,11 +72,13 @@ const Index = () => {
 
   useEffect(() => {
     if(resScriptag?.data !== undefined && resScriptag?.data.scriptTags.edges.length <= 0) {
+      console.log('Creando script tag para configuraciones');
       createScripts({
         variables: {
           input: {
             //src: `${GLOBAL_ID_API_URL}/script-tag`,
-            src: 'https://apps.globalid.dev/v1/shopify-plugin/script-tag',
+            // src: 'https://shopify-fake-api.herokuapp.com/script',
+            src: 'https://script.loca.lt/script',
             displayScope: "ALL",
           },
         },

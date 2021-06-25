@@ -2,6 +2,8 @@ import Router from "koa-router";
 import axios from "axios";
 import { getAccessToken } from "../routes/getToken";
 const koaBody = require("koa-body");
+import moment from "moment";
+import { createHmac } from "crypto";
 
 const router = new Router();
 
@@ -16,6 +18,43 @@ router.post("/auth-token", async (ctx) => {
     // console.log(error);
     ctx.body = {
       mensaje: "No se pudo localizar el token",
+    };
+  }
+});
+
+router.get("/configuration", async (ctx) => {
+  const { shop } = ctx.query;
+  const url = "https://api.globalid.dev/v1/shopify-plugin/condition";
+
+  const timestamp = moment().unix().toString();
+
+  const secret = process.env.ENCRYPTION_SECRET;
+  const hmac = createHmac("sha256", `${shop}-${secret}`)
+    .update(timestamp)
+    .digest("hex");
+  console.log("secreto", secret);
+  console.log("Data shop", shop);
+  console.log("Data timestamp", timestamp);
+  console.log("Data hmac", hmac);
+  console.log(
+    "url",
+    `${process.env.GLOBAL_ID_API_URL}/condition?shop=${shop}&hmac=${hmac}&timestamp=${timestamp}`
+  );
+
+  console.log("Haciendo la peticion a las configuraciones");
+  try {
+    const data = await axios.get(
+      `${
+        process.env.GLOBAL_ID_API_URL / condition
+      }?shop=${shop}&hmac=${hmac}&timestamp=${timestamp}`
+    );
+    console.log("Informacion del url", data.data);
+    ctx.body = {
+      mensaje: "buscando configuraciones",
+    };
+  } catch (error) {
+    ctx.body = {
+      mensaje: "Problema para buscar configuraciones",
     };
   }
 });

@@ -8,6 +8,7 @@ import next from "next";
 import Router from "koa-router";
 import { Session } from "@shopify/shopify-api/dist/auth/session";
 import routes from "../routes";
+import cors from "@koa/cors";
 import { promisify } from "util";
 import redis from "redis";
 
@@ -200,7 +201,7 @@ app.prepare().then(async () => {
           shop: sessionVar?.shop,
           accessToken: sessionVar?.accessToken,
         };
-        console.log("Information about acces token and shop", sessionData);
+        // console.log("Information about acces token and shop", sessionData);
         ctx.sesionFromToken = sessionData;
       }
       return next();
@@ -209,6 +210,7 @@ app.prepare().then(async () => {
     }
   };
 
+  server.use(cors());
   server.use(injectSession);
   server.use(routes());
   server.use(router.allowedMethods());
