@@ -24,8 +24,7 @@ router.post("/auth-token", async (ctx) => {
 
 router.get("/configuration", async (ctx) => {
   const { shop } = ctx.query;
-  const url = "https://api.globalid.dev/v1/shopify-plugin/condition";
-
+  console.log("Obteniendo la información de las configuraciones");
   const timestamp = moment().unix().toString();
 
   const secret = process.env.ENCRYPTION_SECRET;
