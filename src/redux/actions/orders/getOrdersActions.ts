@@ -23,9 +23,6 @@ export const getOrdersAction = (shopName: string, orders: OrderShopify[]) => {
     try {
       const shop = shopName.split('.')[0];
       const result = await axios.get(`/get-orders/${shop}`);
-      // const result = await axios.get(`http://localhost:3001/api/orders/${owner_id}`);
-
-      console.log('Datos de la api global id', result.data);
       const orderGlobal: Order[] = result.data.data;
       const ordersCompleted: Order[] = [];
 
@@ -34,6 +31,7 @@ export const getOrdersAction = (shopName: string, orders: OrderShopify[]) => {
           const orderShopifyId = orderShopify.node.id.split('/')[4];
           if (order.order_id.toString() === orderShopifyId.toString() && order.status === Status.PENDING) {
             const orderComplete = {...order, customer: {...order.customer, purchase_date: orderShopify.node.createdAt}};
+            console.log('orderComplete', orderComplete);
             ordersCompleted.push(orderComplete);
           }
         });

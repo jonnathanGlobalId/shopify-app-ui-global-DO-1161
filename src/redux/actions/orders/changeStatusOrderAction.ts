@@ -33,6 +33,7 @@ export const changeStatusOrderAction = (status: Status, order_id: string) => {
           status,
           purchase_date: Date.now(),
         }
+        console.log('Cancelando orden', data);
         await axios.post('/delete-order', data);
       };
 
@@ -43,10 +44,9 @@ export const changeStatusOrderAction = (status: Status, order_id: string) => {
           status,
           order_id,
         }
+        console.log('Aprovando orden', data);
         await axios.post('/complete-order', data);
       }
-      // const res = await axios.put(`http://localhost:3001/api/order/change-status/${order_id}`, dataSend);
-      // console.log('Cambiando el status de la orden', res.data);
 
       // Change status order and create orders pending;
       const array: Order[] = getState().user.orders;

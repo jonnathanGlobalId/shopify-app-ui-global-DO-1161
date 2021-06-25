@@ -16,7 +16,6 @@ router.get("/get-orders/:shop", async (ctx) => {
         Authorization: `Bearer ${access_token}`,
       },
     });
-    console.log("Resultado de las ordenes", res.data);
     ctx.body = {
       mensaje: "user Orders",
       data: res.data,
@@ -54,8 +53,8 @@ router.post("/delete-order", koaBody(), async (ctx) => {
     /* Global id Request to change status Order */
     const access_token = await getAccessToken();
     await axios.put(
-      `${process.env.GLOBAL_ID_API_URL}/order/${order_id}`,
-      dataSend,
+      `${process.env.GLOBAL_ID_API_URL}/order/${data.order_id}`,
+      data,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -86,8 +85,8 @@ router.post("/complete-order", koaBody(), async (ctx) => {
   console.log("-------------------------------------------");
 
   try {
-    /* Global id Request to change status Order */
-    const url = `https://${shop}/admin/api/2021-04/orders/${data?.order_id}/fulfillments.json`;
+    /* Shopify Request to change status Order */
+    const url = `https://${shop}/admin/api/2021-04/orders/${data.order_id}/fulfillments.json`;
     const dataSend = {
       fulfillment: {
         location_id: `${data?.location}`,
@@ -99,12 +98,12 @@ router.post("/complete-order", koaBody(), async (ctx) => {
         "X-Shopify-Access-Token": accessToken,
       },
     });
-    /* Global id Request to change status Order */
+    /* Shopify Request to change status Order */
 
     /* Global id Request to change status Order */
     const access_token = await getAccessToken();
     await axios.put(
-      `${process.env.GLOBAL_ID_API_URL}/order/${order_id}`,
+      `${process.env.GLOBAL_ID_API_URL}/order/${data.order_id}`,
       data,
       {
         headers: {

@@ -13,12 +13,12 @@ enum Status {
 
 const approvals = () => {
   const userstate: initialState  = useSelector((state: appState) => state.user)
-  const pendindOrder: Order[] = userstate.orders.filter((order: Order) => order.status === Status.PENDING); 
-  console.log('Desde pagina approvals', pendindOrder);
+  // const pendindOrder: Order[] = userstate.pending_orders.filter((order: Order) => order.status === Status.PENDING); 
+  // console.log('Desde pagina approvals', pendindOrder);
   return (
     <ApprovalLayout>
       <HeaderTitle title="Pending Approvals" subtitle="Approve or deny purchases" />
-      {pendindOrder.map((order: Order, position: Number) => (
+      {userstate.pending_orders.map((order: Order, position: Number) => (
         <UserApproval key={order.order_id} order={order} position={position} />
       ))}
     </ApprovalLayout>
