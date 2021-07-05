@@ -1,8 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
 import {Dispatch} from 'redux';
-import { GLOBAL_ID_API_URL } from '../../../conf';
-import { getAccessToken } from '../../../utils/auth';
 import {OrderDispatchTypes} from '../../@types/settingsActionTypes';
 import { appState } from '../../reducer';
 import { initialState } from '../../reducer/user/userReducer';
@@ -26,27 +24,6 @@ export const changeStatusOrderAction = (status: Status, order_id: string) => {
     const userState: initialState = getState().user;
 
     try {
-      if (status === Status.REJECTED) {
-        console.log('Cancelando la orden');
-        const data = {
-          order_id,
-          status,
-          purchase_date: Date.now(),
-        }
-        console.log('Cancelando orden', data);
-        await axios.post('/delete-order', data);
-      };
-
-      if (status === Status.APPROVED) {
-        console.log('Aprovando la orden');
-        const data = {
-          location: userState.location,
-          status,
-          order_id,
-        }
-        console.log('Aprovando orden', data);
-        await axios.post('/complete-order', data);
-      }
 
       // Change status order and create orders pending;
       const array: Order[] = getState().user.orders;
@@ -57,13 +34,32 @@ export const changeStatusOrderAction = (status: Status, order_id: string) => {
 
       array[index] = {...array[index], status: status, customer: {...array[index].customer, purchase_date: moment().toISOString()}}
       arrayPending[indexPending] = {...arrayPending[indexPending], status: status, customer: {...array[indexPending].customer, purchase_date: moment().toISOString()}}
-      const newDataPending = arrayPending.filter((order: Order) => order.status === 'PENDING' );
 
+      if (status === Status.REJECTED) {
+        const data = {
+          order_id,
+          status,
+          purchase_date: Date.now(),
+        }
+        console.log('Cancelando orden', data);
+        await axios.post('/delete-order', data);
+      };
+
+      if (status === Status.APPROVED) {
+        const data = {
+          location: userState.location,
+          status,
+          order_id,
+        }
+        console.log('Aprovando orden', data);
+        await axios.post('/complete-order', data);
+      }
+      
       dispatch({
         type: CHANGE_ORDER_STATUS_SUCCESS,
         payload: {
           orders: array,
-          pending_orders: newDataPending,
+          pending_orders: arrayPending,
         },
       })
 

@@ -119,7 +119,12 @@ router.post("/complete-order", koaBody(), async (ctx) => {
     };
     /* Result of request */
   } catch (error) {
-    console.log(error);
+    console.log("-------------------------------------------");
+    console.log("Error Response Config", error.response.config);
+    console.log("-------------------------------------------");
+    console.log("-------------------------------------------");
+    console.log("Error Response Data", error.response.data);
+    console.log("-------------------------------------------");
     ctx.status = 401;
   }
 });

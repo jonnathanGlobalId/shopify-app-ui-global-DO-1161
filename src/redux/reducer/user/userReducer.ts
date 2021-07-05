@@ -108,6 +108,7 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
   case CHANGE_ORDER_STATUS_SUCCESS:
     return {
       ...state,
+      loading: false,
       orders: action.payload.orders,
       pending_orders: action.payload.pending_orders
     }
