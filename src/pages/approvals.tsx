@@ -13,8 +13,7 @@ enum Status {
 
 const approvals = () => {
   const userstate: initialState  = useSelector((state: appState) => state.user)
-  // const pendindOrder: Order[] = userstate.pending_orders.filter((order: Order) => order.status === Status.PENDING); 
-  // console.log('Desde pagina approvals', pendindOrder);
+
   return (
     <ApprovalLayout>
       <HeaderTitle title="Pending Approvals" subtitle="Approve or deny purchases" />

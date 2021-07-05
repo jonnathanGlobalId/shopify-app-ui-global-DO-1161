@@ -10,6 +10,13 @@ import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_ORDERS, QUERY_LOCATION} from '../g
 import {useQuery, useMutation} from '@apollo/react-hooks';
 import {GET_LOCATION, GET_URL_SHOP} from '../redux/types';
 import { initialState } from '../redux/reducer/user/userReducer';
+import { CHANGE_ORDER_STATUS_SUCCESS } from '../redux/types';
+
+enum Status {
+  PENDING = 'PENDING',
+  REJECTED = 'REJECTED',
+  APPROVED = 'APPROVED'
+}
 
 const Index = () => {
   const [ownerId, setOwnerId] = useState<string>('');
@@ -72,7 +79,7 @@ const Index = () => {
 
   useEffect(() => {
     if(resScriptag?.data !== undefined && resScriptag?.data.scriptTags.edges.length <= 0) {
-      console.log('Creando script tag para configuraciones');
+      // console.log('Creando script tag para configuraciones');
       createScripts({
         variables: {
           input: {
@@ -87,6 +94,22 @@ const Index = () => {
       });
     }
   }, [resScriptag?.data]);
+
+  useEffect(() => {
+    console.log('Modificando las ordenes pendientes');
+    const pendingOrders = userState.orders.filter((order: Order) => order.status === Status.PENDING);
+    console.log('Ordenes pendientes', pendingOrders);
+    console.log('Ordenes completas', userState.orders);
+    if (pendingOrders.length > 0 || pendingOrders !== null) {
+      dispatch({
+        type: CHANGE_ORDER_STATUS_SUCCESS,
+        payload: {
+          orders: userState.orders,
+          pending_orders: pendingOrders,
+        },
+      });
+    }
+  }, [userState.orders]);
 
 
   return (
