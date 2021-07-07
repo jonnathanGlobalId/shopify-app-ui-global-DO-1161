@@ -10,7 +10,7 @@ const HeaderTabs = () => {
   const Home = pathname === '/';
   const Approvals = pathname === '/approvals';
   const History = pathname === '/history';
-  //const Script = pathname === '/script-page';
+  // const Script = pathname === '/script-page';
 
   return (
     <div className="h-24">

@@ -5,7 +5,7 @@ const MainLayout: React.FC = ({children}) => {
   return (
     <>
       <HeaderTabs />
-      <div className="max-w-screen-lg m-auto bg-white rounded-2xl mt-16">
+      <div className="max-w-screen-lg bg-white rounded-2xl m-14">
         {children}
       </div>
       <div className="h-10" />

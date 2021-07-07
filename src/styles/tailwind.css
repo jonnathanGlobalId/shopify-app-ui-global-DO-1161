@@ -2,3 +2,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .main-layout {
+    background-color: red;
+    margin: 50px;
+    border-radius: 16px;
+  }
+}

@@ -16,11 +16,13 @@ import {
   CHANGE_AMOUNT,
   GET_URL_SHOP,
   GET_PENDING_ORDERS,
+  GET_LOCATION
 } from '../../types';
 
-interface initialState {
+export interface initialState {
   user: null | OwnerCondition;
   shopUrl: string;
+  location: string;
   error: boolean;
   loading: boolean;
   isChanged: boolean;
@@ -31,6 +33,7 @@ interface initialState {
 const initialState: initialState = {
   user: null,
   shopUrl: "",
+  location: "",
   error: false,
   loading: false,
   isChanged: false,
@@ -50,6 +53,12 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
       loading: true,
       error: false,
     };
+
+  case GET_LOCATION:
+    return {
+      ...state,
+      location: action.payload
+    }
 
   case GET_USER_INFO_SUCCESS:
   case GET_USER_INFO_FAILURE:  
@@ -71,6 +80,7 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
     return {
       ...state,
       user: action.payload,
+      loading: false,
       isChanged: false,
     };
 
@@ -98,6 +108,7 @@ const userReducer = (state: initialState = initialState, action: userDispatch) =
   case CHANGE_ORDER_STATUS_SUCCESS:
     return {
       ...state,
+      loading: false,
       orders: action.payload.orders,
       pending_orders: action.payload.pending_orders
     }

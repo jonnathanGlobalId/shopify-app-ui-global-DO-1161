@@ -4,6 +4,7 @@ import MainLayout from '../Layout/MainLayout'
 import {useSelector} from 'react-redux';
 import { appState } from '../redux/reducer';
 import moment from 'moment';
+import { initialState } from '../redux/reducer/user/userReducer';
 
 enum Status {
   PENDING = 'PENDING',
@@ -12,8 +13,9 @@ enum Status {
 }
 
 const history = () => {
-  const ordersState: Order[] = useSelector((state: appState) => state.user.orders);
-  const historyOrders: Order[] = ordersState.filter((order: Order) => order.status !== Status.PENDING);
+  const ordersState: initialState = useSelector((state: appState) => state.user);
+  const historyOrders: Order[] = ordersState.orders.filter((order: Order) => order.status !== Status.PENDING);
+  console.log(ordersState);
   console.log('Ordenes aprobadas', historyOrders);
   return (
     <MainLayout>
@@ -34,7 +36,11 @@ const history = () => {
                 <td className="py-4 px-8 text-2xl">{order.customer.name}</td>
                 <td className="py-4 px-8 text-2xl">{moment(order.customer.purchase_date).format("DD/MM/YYYY")}</td>
                 <td className="py-4 px-8 text-2xl">{order.customer.verification_status}</td>
-                <td className="py-4 px-8 text-2xl">{order.status.toLowerCase()}</td>
+                <td className="py-4 px-8 text-2xl">
+                  <a className="text-blue-500 underline" href={`https://${ordersState?.user?.shop}.myshopify.com/admin/orders/${order.order_id}`} target="blank">
+                    {order.status.toLowerCase()}
+                  </a>
+                </td>
               </tr>
             );
           })}

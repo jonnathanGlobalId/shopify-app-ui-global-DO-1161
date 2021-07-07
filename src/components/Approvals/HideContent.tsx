@@ -18,7 +18,7 @@ const HideContent: React.FC<propsHideContent> = (props) => {
         </div>
         <div className="mb-10">
           <h3 className="text-4xl text-gray-500 font-bold mb-8">Purchase date</h3>
-          <h5 className="text-3xl">{moment(purchaseDate.toString()).format("DD/MM/YYYY")}</h5>
+          <h5 className="text-3xl">{purchaseDate ? moment(purchaseDate.toString()).format("DD/MM/YYYY") : '' }</h5>
         </div>
       </div>
       <div className="w-1/2 mb-10">

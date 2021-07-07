@@ -17,6 +17,13 @@ const GET_ORDERS_REJECT = 'GET_ORDERS_REJECT';
 
 const GET_PENDING_ORDERS = 'GET_PENDING_ORDERS';
 
+const GET_LOCATION = 'GET_LOCATION';
+
+export interface GetLocation {
+  readonly type: typeof GET_LOCATION,
+  payload: string
+}
+
 export interface SaveChanges {
   readonly type: typeof SAVE_GLOBAL_STATE,
 };
@@ -55,7 +62,7 @@ export interface changeStatusOrderSuccess {
   readonly type: typeof CHANGE_ORDER_STATUS_SUCCESS,
   payload: {
     orders: Order[],
-    pending_orders: Orders[]
+    pending_orders?: Orders[]
   }
 }
 export interface changeStatusOrderFailure {
@@ -86,9 +93,12 @@ type userDispatch =
   GetUserInfo |
   GetUserInfoSuccess |
   GetUserInfoFailure |
-  ChangeAmount;
+  ChangeAmount |
+  GetLocation;
 
 export type GetInfoDispatchTypes = GetUserInfo | GetUserInfoFailure | GetUserInfoSuccess;
 export type UserDispatchTypes = SaveChanges | SaveChangesFailure | SaveChangesSuccess;
 export type OrderDispatchTypes = changeStatusOrder | changeStatusOrderFailure | changeStatusOrderSuccess;
 export type GetOrderDispatchTypes = getOrders | getOrdersSuccess | getOrdersFailure | getPendingOrders;
+
+export type GetLocationDispatchTypes = GetLocation;

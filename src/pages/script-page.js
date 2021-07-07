@@ -8,8 +8,7 @@ import {
   ResourceList,
   Stack,
 } from "@shopify/polaris";
-import { GLOBAL_ID_API_URL } from "../conf";
-import MainLayout from '../Layout/MainLayout';
+import MainLayout from "../Layout/MainLayout";
 
 const CREATE_SCRIPT_TAG = gql`
   mutation scriptTagCreate($input: ScriptTagInput!) {
@@ -52,7 +51,9 @@ const DELETE_SCRIPTTAG = gql`
 `;
 
 function ScriptPage() {
-  const [createScripts] = useMutation(CREATE_SCRIPT_TAG, {onCompleted: (data) => console.log(data)});
+  const [createScripts] = useMutation(CREATE_SCRIPT_TAG, {
+    onCompleted: (data) => console.log(data),
+  });
   const [deleteScripts] = useMutation(DELETE_SCRIPTTAG);
   const { loading, error, data } = useQuery(QUERY_SCRIPTTAGS);
 
@@ -77,7 +78,7 @@ function ScriptPage() {
                 createScripts({
                   variables: {
                     input: {
-                      src: `https://shopify-fake-api.herokuapp.com/script`,
+                      src: `${process.env.GLOBAL_ID_API_URL}/script-tag`,
                       displayScope: "ALL",
                     },
                   },

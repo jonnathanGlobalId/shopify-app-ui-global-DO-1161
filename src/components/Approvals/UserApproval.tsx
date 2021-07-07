@@ -3,10 +3,10 @@ import HideContent from './HideContent';
 import {appState} from '../../redux/reducer';
 import {useSelector, useDispatch} from 'react-redux';
 import {changeStatusOrderAction} from '../../redux/actions/orders/changeStatusOrderAction';
-import {useMutation} from '@apollo/react-hooks';
-import {ACCEPT_DRAFT_ORDER, REJECT_DRAFT_ORDER} from '../../graphql/Mutations';
-import {CHANGE_ORDER_STATUS_REJECT} from '../../redux/types';
 import moment from 'moment';
+import { initialState } from '../../redux/reducer/user/userReducer';
+import ReactLoading from 'react-loading';
+
 interface PropsUserData {
   order?: Order
   position: Number
@@ -19,46 +19,26 @@ enum Status {
 }
 
 const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
-  const userState = useSelector((state:appState) => state.user);
+  const userState: initialState = useSelector((state:appState) => state.user);
   const dispatch = useDispatch();
   const { order_id, customer, status } = order;
   const { name, verification_status, date_of_birth, issue_date, expiration_date, purchase_date } = customer
   const [showContent, setShowContent] = useState(false);
-  const [approveOrder] = useMutation(ACCEPT_DRAFT_ORDER, 
-    {
-      onError: () => dispatch({type: CHANGE_ORDER_STATUS_REJECT}), 
-      onCompleted: (data) => dispatch(changeStatusOrderAction(Status.APPROVED, order_id, data?.draftOrderComplete?.draftOrder?.order?.id))
-    }
-  );
-  const [rejectOrder] = useMutation(REJECT_DRAFT_ORDER, 
-    {
-      onError: () => dispatch({type: CHANGE_ORDER_STATUS_REJECT}), 
-      onCompleted: (data) => dispatch(changeStatusOrderAction(Status.REJECTED, order_id, data?.draftOrderDelete?.deletedId))
-    }
-  );
+  const [element, setElement] = useState<boolean>(false);
 
-  const changeStatusOrder = (status: Status) => {
-    // dispatch(changeStatusOrderAction(status, order_id, '0987654321'));
+  const changeStatusOrder = async (status: Status) => {
+    const element: Order[] = userState.pending_orders.filter((order: Order) => order.order_id === order_id);
+    // console.log('Mismo elemento', element[0].order_id, order_id, element[0].order_id === order_id);
+    setElement(element[0].order_id === order_id);
+
     if (status === Status.REJECTED) {
-      rejectOrder({
-        variables: {
-          input: {
-            id: `gid://shopify/DraftOrder/${order_id}`,
-          }
-        }
-      })
-      return;
+      console.log('Cancelando la orden', userState.location);
+      dispatch(changeStatusOrderAction(Status.REJECTED, order_id));
     };
     if (status === Status.APPROVED) {
-      approveOrder({
-        variables: {
-          id: `gid://shopify/DraftOrder/${order_id}`,
-        }
-      })
+      dispatch(changeStatusOrderAction(Status.APPROVED, order_id));
     }
   }
-
-  console.log('Desde la lista', order, order_id);
 
   return (
     <>
@@ -84,7 +64,7 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
               <h3 className="text-4xl text-gray-500 font-bold mb-8">Purchase ID</h3>
               <a 
                 target="blank" 
-                href={`https://${userState?.user?.shop}.myshopify.com/admin/${status === 'PENDING' ? 'draft_orders' : 'orders'}/${order_id}`} 
+                href={`https://${userState?.user?.shop}.myshopify.com/admin/orders/${order_id}`} 
                 className="underline text-3xl text-blue-500 cursor-pointer"
               >{ order_id}</a>
             </div>
@@ -104,16 +84,16 @@ const UserApproval: React.FC<PropsUserData> = ({position, order}) => {
               disabled={status === 'REJECTED' ? true : false}
               className={`px-16 py-4 rounded-full text-2xl mr-10 focus:outline-none font-medium ${status === 'REJECTED' ? 'w-1/2 bg-gray-100 cursor-not-allowed text-gray-400' : status === 'APPROVED' ? 'hidden' : status === 'PENDING' && 'bg-gray-300'}`}
             >
-              {status === 'REJECTED' && <i className="fas fa-check text-gray-400 mr-4" />}
-              {status === 'REJECTED' ? 'Purchase rejected' : 'Reject' }
+              {userState.loading && element ? null : status === 'REJECTED' && <i className="fas fa-times text-gray-400 mr-4" />}
+              {userState.loading && element ? <i className="fas fa-circle-notch fa-spin" /> : status === 'REJECTED'? 'Purchase rejected' : 'Reject' }
             </button>
             <button
               onClick={() => changeStatusOrder(Status.APPROVED)}
               disabled={status === 'APPROVED' ? true : false}
               className={`px-16 py-4 rounded-full text-2xl mr-10 focus:outline-none font-medium text-white ${status === 'APPROVED' ? 'w-1/2 bg-blue-300 cursor-not-allowed' : status === 'REJECTED' ? 'hidden' : status === 'PENDING' && 'bg-blue-600'}`}
             >
-              {status === 'APPROVED' && <i className="fas fa-check text-white mr-4" />}
-              {status === 'APPROVED' ? 'Purchase approved' : 'Approve' }
+              {userState.loading && element ? null : status === 'APPROVED' && <i className="fas fa-check text-white mr-4" />}
+              {userState.loading && element ? <i className="fas fa-circle-notch fa-spin" /> : status === 'APPROVED' ? 'Purchase approved' : 'Approve'}
             </button>
           </div>
         </div>

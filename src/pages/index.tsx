@@ -3,15 +3,21 @@ import MainLayout from '../Layout/MainLayout';
 import {ConditionsGlobalId, HeaderTitle, SaveChanges, Loader} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUserInfoAction} from '../redux/actions/user/userActions';
+import {getOrdersAction} from '../redux/actions/orders/getOrdersActions';
 import {appState} from '../redux/reducer';
 import {CREATE_SCRIPT_TAG} from '../graphql/Mutations';
-import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_DRAFT_ORDERS} from '../graphql/Querys';
+import {QUERY_SCRIPTTAGS, QUERY_SHOPID, QUERY_ORDERS, QUERY_LOCATION} from '../graphql/Querys';
 import {useQuery, useMutation} from '@apollo/react-hooks';
-import {createHmac} from 'crypto';
-import moment from 'moment';
-import {GET_URL_SHOP} from '../redux/types';
-import {ENCRYPTION_SECRET, GLOBAL_ID_API_URL} from '../conf'
-import { getOrdersAction } from '../redux/actions/orders/getOrdersActions';
+import {GET_LOCATION, GET_URL_SHOP} from '../redux/types';
+import { initialState } from '../redux/reducer/user/userReducer';
+import { CHANGE_ORDER_STATUS_SUCCESS } from '../redux/types';
+import { GLOBAL_ID_API_URL } from '../conf';
+
+enum Status {
+  PENDING = 'PENDING',
+  REJECTED = 'REJECTED',
+  APPROVED = 'APPROVED'
+}
 
 const Index = () => {
   const [ownerId, setOwnerId] = useState<string>('');
@@ -19,19 +25,17 @@ const Index = () => {
   const [shop, setShop] = useState<string>('');
 
   const dispatch = useDispatch();
-  const userState = useSelector((state: appState) => state.user);
-  const [createScripts] = useMutation(CREATE_SCRIPT_TAG, {onCompleted: (data) => console.log(data)});
+  const userState: initialState = useSelector((state: appState) => state.user);
+  const [createScripts] = useMutation(CREATE_SCRIPT_TAG);
   const resScriptag = useQuery(QUERY_SCRIPTTAGS);
   const resShopId = useQuery(QUERY_SHOPID);
-  const draftOrdersQuery = useQuery(QUERY_DRAFT_ORDERS);
-
-  console.log(draftOrdersQuery.data?.draftOrders?.edges)
-  console.log(userState);
+  const orders = useQuery(QUERY_ORDERS);
+  const locationQuery = useQuery(QUERY_LOCATION);
 
   useEffect(() => {
-    const draftOrders = draftOrdersQuery.data?.draftOrders?.edges;
-    console.log(draftOrders);
-    if (ownerId && shopName && shop && draftOrders !== undefined){
+    const orderQuery: OrderShopify[] = orders.data?.orders?.edges;
+    if (ownerId && shopName && shop && orderQuery !== undefined){
+      const ordersData = orderQuery.filter((order: OrderShopify) => order.node.cancelledAt === null);
       const firstData: OwnerCondition = {
         name: shopName,
         owner_id: ownerId,
@@ -41,9 +45,20 @@ const Index = () => {
         order_amount_limit: 0,
       }
       dispatch(getUserInfoAction(ownerId, firstData));
-      dispatch(getOrdersAction(ownerId, draftOrders));
+      dispatch(getOrdersAction(shop, ordersData));
     }
-  }, [ownerId, draftOrdersQuery.data]);
+  }, [ownerId, orders.data]);
+
+  useEffect(() => {
+    if (locationQuery.data !== undefined) {
+      const location: string = locationQuery.data?.locations?.edges[0]?.node?.id;
+      const locationId = location.split('/')[4];
+      dispatch({
+        type: GET_LOCATION,
+        payload: locationId,
+      });
+    }
+  }, [locationQuery.data]);
 
   useEffect(() => {
     if(resShopId?.data !== undefined) {
@@ -62,12 +77,11 @@ const Index = () => {
 
   useEffect(() => {
     if(resScriptag?.data !== undefined && resScriptag?.data.scriptTags.edges.length <= 0) {
-      console.log('vamos a crear un scripttag')
+      // console.log('Creando script tag para configuraciones');
       createScripts({
         variables: {
           input: {
-            //src: `${GLOBAL_ID_API_URL}/script-tag`,
-            src: 'https://shopify-fake-api.herokuapp.com/script',
+            src: `${GLOBAL_ID_API_URL}/script-tag`,
             displayScope: "ALL",
           },
         },
@@ -77,17 +91,22 @@ const Index = () => {
   }, [resScriptag?.data]);
 
   useEffect(() => {
-    if(resScriptag?.data !== undefined && resScriptag?.data.scriptTags.edges.length > 0 && resShopId?.data !== undefined) {
-      const secret = ENCRYPTION_SECRET;
-      const epoch = (moment().unix()).toString();
-      const hmac = createHmac('sha256', `${ownerId}-${secret}`).update(epoch);
+    const pendingOrders = userState.orders.filter((order: Order) => order.status === Status.PENDING);
+    if (pendingOrders.length > 0 || pendingOrders !== null) {
+      dispatch({
+        type: CHANGE_ORDER_STATUS_SUCCESS,
+        payload: {
+          orders: userState.orders,
+          pending_orders: pendingOrders,
+        },
+      });
     }
-  }, [resScriptag?.data, resShopId?.data]);
+  }, [userState.orders]);
 
 
   return (
     <>
-      <Loader show={draftOrdersQuery.loading} />
+      <Loader show={userState.loading} />
       <MainLayout>
         <HeaderTitle title="Settings" subtitle="Reduce risk and eliminate fraud with free customer ID verification" />
         <div>

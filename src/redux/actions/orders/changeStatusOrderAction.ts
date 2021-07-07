@@ -1,10 +1,9 @@
 import axios from 'axios';
 import moment from 'moment';
 import {Dispatch} from 'redux';
-import { GLOBAL_ID_API_URL } from '../../../conf';
-import { getAccessToken } from '../../../utils/auth';
 import {OrderDispatchTypes} from '../../@types/settingsActionTypes';
 import { appState } from '../../reducer';
+import { initialState } from '../../reducer/user/userReducer';
 import {
   CHANGE_ORDER_STATUS,
   CHANGE_ORDER_STATUS_SUCCESS,
@@ -17,39 +16,50 @@ enum Status {
   APPROVED = 'APPROVED'
 }
 
-export const changeStatusOrderAction = (status: Status, order_id: string, new_id: string) => {
+export const changeStatusOrderAction = (status: Status, order_id: string) => {
   return async (dispatch: Dispatch<OrderDispatchTypes>, getState: () => appState)  => {
     dispatch({
       type: CHANGE_ORDER_STATUS
     });
-    const new_order_id = new_id.split('/')[4];
-    const dataSend = {
-      status,
-      order_id: new_order_id,
-      purchase_date: Date.now(),
-    }
+    const userState: initialState = getState().user;
+
     try {
-      const access_token: string = await getAccessToken();
-      await axios.put(`${GLOBAL_ID_API_URL}/order/${order_id}`, dataSend, {
-        headers: {
-          'Authorization': `Bearer ${access_token}`
-        }
-      });
+
+      // Change status order and create orders pending;
       const array: Order[] = getState().user.orders;
       const arrayPending: Order[] = getState().user.pending_orders;
 
       const index = array.findIndex((order: Order) => order.order_id === order_id);
       const indexPending = arrayPending.findIndex((order: Order) => order.order_id === order_id);
 
-      array[index] = {...array[index], status: status, order_id: dataSend.order_id, customer: {...array[index].customer, purchase_date: moment().toISOString()}}
-      arrayPending[indexPending] = {...arrayPending[indexPending], status: status, order_id: dataSend.order_id, customer: {...array[indexPending].customer, purchase_date: moment().toISOString()}}
-      const newDataPending = arrayPending.filter((order: Order) => order.status === 'PENDING' );
+      array[index] = {...array[index], status: status, customer: {...array[index].customer, purchase_date: moment().toISOString()}}
+      arrayPending[indexPending] = {...arrayPending[indexPending], status: status, customer: {...array[indexPending].customer, purchase_date: moment().toISOString()}}
 
+      if (status === Status.REJECTED) {
+        const data = {
+          order_id,
+          status,
+          purchase_date: Date.now(),
+        }
+        console.log('Cancelando orden', data);
+        await axios.post('/delete-order', data);
+      };
+
+      if (status === Status.APPROVED) {
+        const data = {
+          location: userState.location,
+          status,
+          order_id,
+        }
+        console.log('Aprovando orden', data);
+        await axios.post('/complete-order', data);
+      }
+      
       dispatch({
         type: CHANGE_ORDER_STATUS_SUCCESS,
         payload: {
           orders: array,
-          pending_orders: newDataPending,
+          pending_orders: arrayPending,
         },
       })
 

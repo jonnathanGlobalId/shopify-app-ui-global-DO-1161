@@ -32,3 +32,5 @@ export const GET_ORDERS_REJECT = 'GET_ORDERS_REJECT';
 export const GET_PENDING_ORDERS = 'GET_PENDING_ORDERS';
 
 export const GET_URL_SHOP = 'GET_URL_SHOP';
+
+export const GET_LOCATION = 'GET_LOCATION';

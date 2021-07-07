@@ -1,7 +1,5 @@
 import axios from 'axios';
 import {Dispatch} from 'redux';
-import { GLOBAL_ID_API_URL } from '../../../conf';
-import { getAccessToken } from '../../../utils/auth';
 import { GetOrderDispatchTypes } from '../../@types/settingsActionTypes';
 import {
   GET_ORDERS,
@@ -10,25 +8,30 @@ import {
   GET_PENDING_ORDERS,
 } from '../../types';
 
-export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => {
+enum Status {
+  PENDING = 'PENDING',
+  REJECTED = 'REJECTED',
+  APPROVED = 'APPROVED'
+}
+
+export const getOrdersAction = (shopName: string, orders: OrderShopify[]) => {
   return async (dispatch: Dispatch<GetOrderDispatchTypes>) => {
     dispatch({
       type: GET_ORDERS,
     });
+    console.log('Buscando las ordedes');
     try {
-      const access_token: string = await getAccessToken();
-      const result = await axios.get(`${GLOBAL_ID_API_URL}/order`, {
-        headers: {
-          'Authorization': `Bearer ${access_token}`
-        }
-      });
+      const shop = shopName.split('.')[0];
+      const result = await axios.get(`/get-orders/${shop}`);
       const orderGlobal: Order[] = result.data.data;
       const ordersCompleted: Order[] = [];
+
       orderGlobal.forEach((order: Order) => {
-        draftOrders.forEach((draftOrder: DraftOrder) => {
-          const idDraftOrder = draftOrder.node.id.split('/')[4];
-          if (order.order_id.toString() === idDraftOrder.toString()) {
-            const orderComplete = {...order, customer: {...order.customer, purchase_date: draftOrder.node.createdAt}};
+        orders.forEach((orderShopify: OrderShopify) => {
+          const orderShopifyId = orderShopify.node.id.split('/')[4];
+          if (order.order_id.toString() === orderShopifyId.toString() && order.status === Status.PENDING) {
+            const orderComplete = {...order, customer: {...order.customer, purchase_date: orderShopify.node.createdAt}};
+            // console.log('orderComplete', orderComplete);
             ordersCompleted.push(orderComplete);
           }
         });
@@ -41,7 +44,7 @@ export const getOrdersAction = (owner_id: string, draftOrders: DraftOrder[]) => 
       dispatch({
         type: GET_PENDING_ORDERS,
         payload: ordersCompleted
-      })
+      });
     } catch (error) {
       dispatch({
         type: GET_ORDERS_REJECT

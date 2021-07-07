@@ -6,8 +6,6 @@ import {
 import axios from 'axios';
 import {Dispatch} from 'redux';
 import {GetInfoDispatchTypes} from '../../@types/settingsActionTypes';
-import { GLOBAL_ID_API_URL } from '../../../conf';
-import { getAccessToken } from '../../../utils/auth';
 
 export const getUserInfoAction = (owner_id: string, conditionsData: OwnerCondition) => {
   return async (dispatch: Dispatch<GetInfoDispatchTypes>) => {
@@ -15,31 +13,33 @@ export const getUserInfoAction = (owner_id: string, conditionsData: OwnerConditi
       dispatch({
         type: GET_USER_INFO
       });
-      const access_token = await getAccessToken();
-      const result = await axios.get(`${GLOBAL_ID_API_URL}/owner/${owner_id}`, {
-        headers: {
-          'Authorization': `Bearer ${access_token}`
-        }
-      });
+      console.log('Trayendo los datos del usuario');
+      const result = await axios.get(`/get-owner-settings/${owner_id}`);
+      const data = {
+        owner_id : result.data.data.owner_id,
+        name : result.data.data.name,
+        shop : result.data.data.shop,
+        order_amount_limit : result.data.data.order_amount_limit,
+        order_amount_limit_enabled : result.data.data.order_amount_limit_enabled,
+        different_address_enabled : result.data.data.different_address_enabled,
+      }
+      console.log('Data global id api of user settings', result.data);
       dispatch({
         type: GET_USER_INFO_SUCCESS,
-        payload: result.data.data
+        payload: data
       });
     } catch (error) {
+      console.log('Hubo un error al encontrar al usuario, creando')
       try {
         conditionsData.shop = conditionsData.shop.split('.')[0];
-        const access_token: string = await getAccessToken();
-        await axios.put(`${GLOBAL_ID_API_URL}/owner/${owner_id}`, conditionsData, {
-          headers: {
-            'Authorization': `Bearer ${access_token}`
-          }
-        });
+        await axios.put(`/create-user`, conditionsData);
 
         dispatch({
           type: GET_USER_INFO_SUCCESS,
           payload: conditionsData
         });
       } catch (error) {
+        console.log('Hubo un error al crear al usuario mostrar mock')
         dispatch({
           type: GET_USER_INFO_FAILURE,
           payload: conditionsData,
